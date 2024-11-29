@@ -441,7 +441,7 @@ sphere.material = material; // 应用材质到球上
       var sphere = new BABYLON.Mesh.CreateSphere('sphere1', 16, 2, scene)
       //  调高一点
       sphere.position.y = 2
-      var texture = new BABYLON.Texture("http://agents.uue.cn/courses/course-Web-3D/assets/marble.jpg", scene);
+      var texture = new BABYLON.Texture("https://agents.uue.cn/courses/Web-3D/assets/marble.jpg", scene);
       var material = new BABYLON.StandardMaterial("material", scene);
       material.diffuseTexture = texture;
       sphere.material = material; // 应用材质到球上
@@ -593,7 +593,7 @@ scene.beginAnimation(sphere, 0, 100, true);
       var sphere = new BABYLON.Mesh.CreateSphere('sphere1', 16, 2, scene)
       //  调高一点
       sphere.position.y = 2
-      var texture = new BABYLON.Texture('http://agents.uue.cn/courses/course-Web-3D/assets/marble.jpg', scene)
+      var texture = new BABYLON.Texture('https://agents.uue.cn/courses/Web-3D/assets/marble.jpg', scene)
       var material = new BABYLON.StandardMaterial('material', scene)
       material.diffuseTexture = texture
       sphere.material = material // 应用材质到球上
@@ -1325,7 +1325,7 @@ Babylon.js 的物理引擎还提供了碰撞检测和响应的功能。你可以
       // 导入 glTF 插件
       BABYLON.SceneLoader.RegisterPlugin(new BABYLON.GLTFFileLoader())
       // 导入外部模型或场景
-      BABYLON.SceneLoader.ImportMesh('', 'http://agents.uue.cn/courses/course-Web-3D/assets/models/', 'Duck.glb', scene, function (meshes) {
+      BABYLON.SceneLoader.ImportMesh('', 'https://agents.uue.cn/courses/Web-3D/assets/models/', 'Duck.glb', scene, function (meshes) {
         // 在加载完成后的回调函数中进行操作
         // meshes 是包含导入的模型的数组
 
@@ -1404,7 +1404,7 @@ Babylon.js 的物理引擎还提供了碰撞检测和响应的功能。你可以
         BABYLON.SceneLoader.RegisterPlugin(new BABYLON.GLTFFileLoader())
 
         // 导入鸭子模型
-        BABYLON.SceneLoader.ImportMesh('', 'http://agents.uue.cn/courses/course-Web-3D/assets/models/', 'Duck.glb', scene, function (meshes) {
+        BABYLON.SceneLoader.ImportMesh('', 'https://agents.uue.cn/courses/Web-3D/assets/models/', 'Duck.glb', scene, function (meshes) {
             // 在加载完成后的回调函数中进行操作
             // meshes 是包含导入的模型的数组
 
@@ -1482,7 +1482,7 @@ Babylon.js 的物理引擎还提供了碰撞检测和响应的功能。你可以
       // 导入 glTF 插件
       BABYLON.SceneLoader.RegisterPlugin(new BABYLON.GLTFFileLoader())
       // 导入外部模型或场景
-      BABYLON.SceneLoader.ImportMesh('', 'http://agents.uue.cn/courses/course-Web-3D/assets/models/', 'Bee-compressed.glb', scene, function (meshes) {
+      BABYLON.SceneLoader.ImportMesh('', 'https://agents.uue.cn/courses/Web-3D/assets/models/', 'Bee-compressed.glb', scene, function (meshes) {
         // 在加载完成后的回调函数中进行操作
         // meshes 是包含导入的模型的数组
         meshes[0].scaling = new BABYLON.Vector3(0.1, 0.1, 0.1)
@@ -1595,7 +1595,7 @@ Babylon.js 的物理引擎还提供了碰撞检测和响应的功能。你可以
         const light = new BABYLON.HemisphericLight('light', new BABYLON.Vector3(0, 1, 0), scene)
 
         // 导入模型
-        BABYLON.SceneLoader.ImportMesh('', 'http://agents.uue.cn/courses/course-Web-3D/assets/models/', 'Feed check vavle assembly.glb', scene, meshes => {
+        BABYLON.SceneLoader.ImportMesh('', 'https://agents.uue.cn/courses/Web-3D/assets/models/', 'Feed check vavle assembly.glb', scene, meshes => {
           const model = meshes[0]
 
           // 创建高亮效果
@@ -1749,7 +1749,7 @@ exporter.exportMesh(scene.getMeshByName("meshName"), "path/to/output.stl");
       BABYLON.SceneLoader.RegisterPlugin(new BABYLON.GLTFFileLoader())
 
       // 导入外部模型或场景
-      BABYLON.SceneLoader.ImportMesh('', 'http://agents.uue.cn/courses/course-Web-3D/assets/models/', 'car.gltf', scene, function (meshes) {
+      BABYLON.SceneLoader.ImportMesh('', 'https://agents.uue.cn/courses/Web-3D/assets/models/', 'car.gltf', scene, function (meshes) {
         // 在加载完成后的回调函数中进行操作
         // meshes 是包含导入的模型的数组
 
@@ -1853,7 +1853,7 @@ exporter.exportMesh(scene.getMeshByName("meshName"), "path/to/output.stl");
         const light = new BABYLON.HemisphericLight('light', new BABYLON.Vector3(0, 1, 0), scene)
 
         // 导入模型
-        BABYLON.SceneLoader.ImportMesh('', 'http://agents.uue.cn/courses/course-Web-3D/assets/models/', 'Feed check vavle assembly.glb', scene, meshes => {
+        BABYLON.SceneLoader.ImportMesh('', 'https://agents.uue.cn/courses/Web-3D/assets/models/', 'Feed check vavle assembly.glb', scene, meshes => {
           const model = meshes[0]
 
           const meshDirectoryTree = createMeshDirectoryTree(model)
@@ -1992,13 +1992,13 @@ exporter.exportMesh(scene.getMeshByName("meshName"), "path/to/output.stl");
       var light = new BABYLON.HemisphericLight('light', new BABYLON.Vector3(0, 1, 0), scene)
 
       // 加载Duck.glb模型
-      BABYLON.SceneLoader.ImportMesh('', 'http://agents.uue.cn/courses/course-Web-3D/assets/models/', 'Duck.glb', scene, function (meshes) {
+      BABYLON.SceneLoader.ImportMesh('', 'https://agents.uue.cn/courses/Web-3D/assets/models/', 'Duck.glb', scene, function (meshes) {
         var duck = meshes[0]
         duck.rotationQuaternion = null // 移除之前的四元数旋转
         duck.rotation.y = Math.PI / 2 // 设置初始旋转角度
 
         // 加载Bee.glb模型
-        BABYLON.SceneLoader.ImportMesh('', 'http://agents.uue.cn/courses/course-Web-3D/assets/models/', 'Bee-compressed.glb', scene, function (meshes) {
+        BABYLON.SceneLoader.ImportMesh('', 'https://agents.uue.cn/courses/Web-3D/assets/models/', 'Bee-compressed.glb', scene, function (meshes) {
           var bee = meshes[0]
           bee.rotationQuaternion = null // 移除之前的四元数旋转
           bee.position.y = 3 // 设置bee模型的相对位置
