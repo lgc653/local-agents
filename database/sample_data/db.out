@@ -1,0 +1,1041 @@
+--
+-- PostgreSQL database dump
+--
+
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = off;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET escape_string_warning = off;
+
+--
+-- Name: plpgsql; Type: PROCEDURAL LANGUAGE; Schema: -; Owner: postgres
+--
+
+CREATE PROCEDURAL LANGUAGE plpgsql;
+
+
+ALTER PROCEDURAL LANGUAGE plpgsql OWNER TO postgres;
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: dt_account; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE dt_account (
+    account_id integer NOT NULL,
+    login_id text NOT NULL,
+    exer_name character varying(50) NOT NULL,
+    exer_type smallint NOT NULL,
+    sex_flg character varying DEFAULT 'm'::character varying NOT NULL,
+    login_password character varying(50) NOT NULL,
+    entry_date timestamp without time zone DEFAULT now() NOT NULL,
+    last_login_date timestamp without time zone,
+    guild_id bigint,
+    "ENTRY_ID" smallint,
+    mail_address character varying(100),
+    CONSTRAINT ckc_sex_flg_dt_accou CHECK (((sex_flg)::text = ANY (ARRAY[('m'::character varying)::text, ('f'::character varying)::text])))
+);
+
+
+ALTER TABLE public.dt_account OWNER TO postgres;
+
+--
+-- Name: dt_account_account_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE dt_account_account_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.dt_account_account_id_seq OWNER TO postgres;
+
+--
+-- Name: dt_account_account_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE dt_account_account_id_seq OWNED BY dt_account.account_id;
+
+
+--
+-- Name: dt_account_account_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('dt_account_account_id_seq', 1, false);
+
+
+--
+-- Name: dt_account_info; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE dt_account_info (
+    account_id bigint NOT NULL,
+    exer_level smallint DEFAULT 1 NOT NULL,
+    experience_point bigint DEFAULT 0 NOT NULL,
+    win_count bigint DEFAULT 0 NOT NULL,
+    lose_count bigint DEFAULT 0 NOT NULL,
+    draw_count bigint DEFAULT 0 NOT NULL,
+    last_battle_date timestamp without time zone,
+    exer_comment text
+);
+
+
+ALTER TABLE public.dt_account_info OWNER TO postgres;
+
+--
+-- Name: dt_account_product; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE dt_account_product (
+    account_id bigint NOT NULL,
+    product_id bigint NOT NULL,
+    product_count bigint DEFAULT 0 NOT NULL
+);
+
+
+ALTER TABLE public.dt_account_product OWNER TO postgres;
+
+--
+-- Name: dt_guild; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE dt_guild (
+    guild_id integer NOT NULL,
+    guild_name text NOT NULL,
+    master_account_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.dt_guild OWNER TO postgres;
+
+--
+-- Name: dt_guild_guild_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE dt_guild_guild_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.dt_guild_guild_id_seq OWNER TO postgres;
+
+--
+-- Name: dt_guild_guild_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE dt_guild_guild_id_seq OWNED BY dt_guild.guild_id;
+
+
+--
+-- Name: dt_guild_guild_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('dt_guild_guild_id_seq', 1, false);
+
+
+--
+-- Name: mt_entry; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE mt_entry (
+    entry_id smallint NOT NULL,
+    entry_name text NOT NULL
+);
+
+
+ALTER TABLE public.mt_entry OWNER TO postgres;
+
+--
+-- Name: mt_exer_type; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE mt_exer_type (
+    exer_type_id smallint NOT NULL,
+    exer_type_name text NOT NULL
+);
+
+
+ALTER TABLE public.mt_exer_type OWNER TO postgres;
+
+--
+-- Name: mt_product; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE mt_product (
+    product_id bigint NOT NULL,
+    product_name character varying(100) NOT NULL,
+    product_price numeric NOT NULL,
+    skill_id_0 bigint,
+    skill_id_1 bigint
+);
+
+
+ALTER TABLE public.mt_product OWNER TO postgres;
+
+--
+-- Name: mt_skill; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE mt_skill (
+    skill_id smallint NOT NULL,
+    skill_name character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.mt_skill OWNER TO postgres;
+
+--
+-- Name: account_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE dt_account ALTER COLUMN account_id SET DEFAULT nextval('dt_account_account_id_seq'::regclass);
+
+
+--
+-- Name: guild_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE dt_guild ALTER COLUMN guild_id SET DEFAULT nextval('dt_guild_guild_id_seq'::regclass);
+
+
+--
+-- Data for Name: dt_account; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY dt_account (account_id, login_id, exer_name, exer_type, sex_flg, login_password, entry_date, last_login_date, guild_id, "ENTRY_ID", mail_address) FROM stdin;
+16582	-digi76731	さとうLEO	1	m	82306731	2004-07-13 00:18:48	2006-03-02 02:07:11	\N	\N	-digi76731@test.com
+12543	1111	1111	1	m	4513	2004-07-01 12:33:33	2009-01-24 19:19:41	61	\N	1111@test.com
+16347	-xxx99	xxx99	1	m	445566	2004-07-11 18:27:20	2006-02-27 01:14:32	\N	\N	-xxx99@test.com
+13007	AceJack	红八月	1	m	eieieiei	2004-07-01 18:00:17	2008-01-29 00:07:31	61	\N	Takku@test.com
+14541	Tomohiro	Ψ鬼丸Ψ	1	m	tomohiro	2004-07-03 23:09:47	2007-02-26 00:00:55	\N	\N	Tomohiro@test.com
+12552	lachesith	Alteil	1	m	b3XD7Y9RPQ	2004-07-01 12:35:20	2009-07-06 19:27:21	61	3	lachesith@test.com
+12585	elkhound	アル	1	m	terry	2004-07-01 12:39:35	2009-07-06 19:28:21	61	2	elkhound@test.com
+12625	gundam24	逍遥自在	1	m	gangel	2004-07-01 12:58:46	2009-07-06 18:43:37	61	3	gundam24@test.com
+12635	-tnfseko	璇藍東林	1	m	4832	2004-07-01 13:03:02	2006-02-16 13:03:51	\N	3	-tnfseko@test.com
+12665	-babycow444	不理不理左衛門	1	m	babycow333	2004-07-01 13:19:51	2006-02-16 13:20:20	\N	3	-babycow444@test.com
+12671	-ASTINA	ASTINA	1	m	PXM01244	2004-07-01 13:21:55	2006-02-23 04:00:40	61	2	-ASTINA@test.com
+12692	-lnciana	lnciana	1	m	mocha	2004-07-01 13:36:47	2006-02-16 13:37:07	61	1	-lnciana@test.com
+12910	mahouno	minazuki	1	m	tukimawari	2004-07-01 16:38:54	2008-03-02 12:44:37	61	\N	mahouno@test.com
+14831	sunrise	清风无影	1	m	tontyan	2004-07-04 23:35:32	2008-02-09 15:36:59	\N	\N	sunrise@test.com
+15009	arumirukiru	Wilmer	1	m	b01035b6013d	2004-07-05 15:43:36	2008-03-12 02:51:30	\N	\N	arumirukiru@test.com
+15047	-fdggs730	ＬＯＶＩＮ‘	1	m	27115689	2004-07-05 19:15:11	2006-02-20 19:24:21	\N	\N	-fdggs730@test.com
+15073	-MellRince	MellRince	1	f	19760630	2004-07-05 21:13:19	2006-02-21 19:40:09	\N	\N	-MellRince@test.com
+15144	BUA184	リヒト	1	m	urWk3t	2004-07-06 02:39:00	2008-07-20 15:40:32	\N	\N	BUA184@test.com
+15183	testalteil05	alteil05	1	f	testalteil05	2004-07-06 12:47:11	2008-07-30 20:36:20	\N	\N	testalteil05@test.com
+15184	testalteil06	alteil06	1	f	testalteil06	2004-07-06 12:47:28	2008-07-14 21:25:26	58	\N	testalteil06@test.com
+16073	-Darknies	Darknies	1	m	7777777	2004-07-10 02:42:38	2006-04-17 14:08:00	\N	\N	-Darknies@test.com
+16180	-adue	Dong Lee	1	m	tebasaki	2004-07-10 17:33:15	2006-05-02 00:32:42	\N	\N	-adue@test.com
+16189	emr007	ＥＭＲ	1	m	yontory	2004-07-10 18:23:42	2007-05-24 01:36:43	\N	\N	emr007@test.com
+16192	pbkm8	断 桥 残 雪	1	m	0008	2004-07-10 18:53:13	2007-10-24 22:48:44	\N	\N	pbkm8@test.com
+16219	yoruneko	无边无际	1	m	harukaze	2004-07-10 20:57:21	2008-03-20 21:53:48	\N	\N	yoruneko@test.com
+16278	-annemarie	手島	1	f	96669481	2004-07-11 04:03:01	2006-02-26 16:52:19	\N	\N	-annemarie@test.com
+16301	jiro0221I	悠久のアイオーン	1	m	lightning	2004-07-11 12:14:23	2008-07-20 16:39:26	\N	\N	jiro0221I@test.com
+16323	-abcddog7775	伊達楓	1	m	7775	2004-07-11 14:40:23	2006-02-28 21:47:12	\N	\N	-abcddog7775@test.com
+16329	kamakubi	鎌首	1	m	1928	2004-07-11 15:17:41	2007-08-07 12:06:07	\N	\N	kamakubi@test.com
+16357	hatahata	ＰＩＮＫ	1	m	1stwish	2004-07-11 20:15:19	2007-08-06 04:15:37	\N	\N	hatahata@test.com
+16374	-ckf0324	破壞者	1	m	90487026	2004-07-11 21:53:52	2006-02-28 19:36:56	\N	\N	-ckf0324@test.com
+16375	raul	Katrina Lee	1	m	ty7129	2004-07-11 22:02:51	2007-06-12 22:18:38	\N	\N	raul@test.com
+16390	atkss	書狂	1	m	22678139	2004-07-11 23:50:08	2008-02-23 00:05:19	\N	\N	atkss@test.com
+16411	-ABCD	鳩夜	1	m	29899977	2004-07-12 02:14:54	2006-02-28 01:42:17	\N	\N	-ABCD@test.com
+16630	-shapeshifer	shapeshifer	1	m	k942131	2004-07-13 02:08:05	2006-03-01 22:03:18	\N	\N	-shapeshifer@test.com
+16632	shuto64	龍貴将	1	m	4A9k9a9r	2004-07-13 02:09:58	2008-01-21 10:04:15	\N	\N	shuto64@test.com
+12522	sintax	Falbrav	2	m	fel7014	2004-07-01 12:31:00	2008-02-26 10:24:38	61	\N	sintax@test.com
+12519	-lainzip	玲音	2	m	lainisthebest	2004-07-01 12:30:30	2006-02-28 01:59:32	\N	\N	-lainzip@test.com
+12502	228228	Peter	1	f	225225225	2004-07-01 12:20:13	2009-07-26 19:20:33	57	\N	228228@test.com
+12628	-ifyoutry	龍人	3	m	sjl68020	2004-07-01 12:59:44	2006-02-22 20:32:38	\N	\N	-ifyoutry@test.com
+16435	-jayccc	雷公	1	m	02140214	2004-07-12 07:35:43	2006-03-07 23:55:17	\N	\N	-jayccc@test.com
+16476	-haruhi	米粒	1	m	11211121	2004-07-12 14:48:12	2006-02-28 17:27:15	\N	\N	-haruhi@test.com
+13894	-baronkongu	梧桐华落	1	m	kongu	2004-07-02 16:47:07	2006-02-22 22:38:10	61	\N	-baronkongu@test.com
+13905	imitator	imitator	1	m	milktea	2004-07-02 17:17:49	2008-03-23 18:36:33	\N	\N	imitator@test.com
+13910	-eggking4	eggking4	1	m	iudgkm12	2004-07-02 17:23:23	2006-02-17 17:23:31	61	\N	-eggking4@test.com
+13918	sisucoal	枉丽眉?	1	m	4567al	2004-07-02 17:36:50	2008-03-19 19:45:55	\N	\N	sisucoal@test.com
+13957	-hisui	hisui	1	f	hiro321	2004-07-02 18:35:50	2006-02-18 14:26:12	\N	\N	-hisui@test.com
+13968	sinoa	sinoa	1	m	8241	2004-07-02 18:55:28	2007-12-21 22:52:12	\N	\N	sinoa@test.com
+14012	ta0718	saiun	1	m	0718	2004-07-02 20:42:15	2008-03-21 12:30:10	\N	\N	ta0718@test.com
+14014	qwert	holynight	1	m	qwert	2004-07-02 20:46:26	2008-02-28 21:48:18	\N	\N	qwert@test.com
+14060	sakiko4	月光の騎士：ルクス	1	m	cx54d456	2004-07-02 21:34:25	2007-05-08 15:28:44	\N	\N	sakiko4@test.com
+14100	asdfg	BIGCULP	1	m	asdfg	2004-07-02 22:07:50	2008-02-29 16:09:18	\N	\N	asdfg@test.com
+14111	superu	魅力与梦想	1	m	610421	2004-07-02 22:22:25	2008-01-22 14:28:16	\N	\N	superu@test.com
+14134	-inyui	HaveDream	1	m	hiroyasu	2004-07-02 23:03:04	2006-02-18 20:22:08	\N	\N	-inyui@test.com
+14170	-mothmaru	花丸	1	m	behemoth	2004-07-03 00:17:40	2006-02-18 00:24:20	\N	\N	-mothmaru@test.com
+14172	asobu	笨笨熊	1	m	monokaki	2004-07-03 00:22:10	2008-02-27 14:39:32	\N	\N	asobu@test.com
+14185	gp03d0434	sonoichi	1	m	0434011	2004-07-03 01:00:01	2007-02-06 09:48:15	\N	\N	gp03d0434@test.com
+14191	hhcgftyyuyee	yuki	1	m	youie187lmnb	2004-07-03 01:24:19	2006-05-13 23:30:23	\N	\N	hhcgftyyuyee@test.com
+14195	tako02	大漠孤鹰	1	m	skyblue	2004-07-03 01:38:43	2008-03-24 19:25:30	\N	\N	tako02@test.com
+14200	975757	刁蔓_Reachel	1	m	lilamaim	2004-07-03 01:59:38	2007-03-26 21:16:39	\N	\N	975757@test.com
+14229	-yagato	Stupid stone	1	m	kiritubo	2004-07-03 04:07:11	2007-03-17 19:46:41	\N	\N	-yagato@test.com
+14255	sakiko20	［強顔歡笑］	1	m	cx54d456	2004-07-03 06:16:57	2008-01-10 22:03:59	\N	\N	sakiko20@test.com
+14268	sakiko30	出来杉	1	m	cx54d456	2004-07-03 06:59:25	2007-04-13 15:53:59	\N	\N	sakiko30@test.com
+14289	goodluck	PARTHENON	1	m	haruki	2004-07-03 09:31:32	2008-01-09 07:47:46	\N	\N	goodluck@test.com
+14291	masa	刘春阳	1	m	9369	2004-07-03 09:36:51	2007-12-04 00:10:51	\N	\N	masa@test.com
+14318	-yajima0406	猛虎	1	m	dragonball	2004-07-03 12:32:12	2006-03-07 13:55:29	\N	\N	-yajima0406@test.com
+14368	sakiko39	设计在线	1	m	cx54d456	2004-07-03 14:44:46	2008-03-25 09:49:54	\N	\N	sakiko39@test.com
+14375	redarow	redarow	1	m	hz5623	2004-07-03 15:17:08	2007-03-07 23:55:46	\N	\N	redarow@test.com
+14393	-jmtforce	JCORE	1	m	jmtforce	2004-07-03 16:18:16	2006-02-18 16:18:33	\N	\N	-jmtforce@test.com
+14551	hanumarn	hanumarn	1	m	3093	2004-07-03 23:46:44	2008-03-23 19:14:22	\N	\N	hanumarn@test.com
+14405	qmm48821	爱恋紫蝴蝶	1	m	jo7984	2004-07-03 16:49:06	2008-01-15 07:15:21	\N	\N	qmm48821@test.com
+14412	-76112007	MAMA	1	m	76112007	2004-07-03 17:04:53	2006-04-18 23:09:21	\N	\N	-76112007@test.com
+14423	keygood	东方	1	m	sophist	2004-07-03 17:27:34	2008-02-20 21:12:28	\N	\N	keygood@test.com
+14444	twilight	心不化妆	1	m	blackking	2004-07-03 18:31:32	2007-09-14 03:03:39	\N	\N	twilight@test.com
+14447	-kochitaba	深秋的天Late	1	m	ka937kya1ke71	2004-07-03 18:37:33	2007-04-06 23:21:20	\N	\N	-kochitaba@test.com
+14472	sonnsaku22	空君	1	m	syuzenn	2004-07-03 20:05:46	2007-10-17 02:52:56	\N	\N	sonnsaku22@test.com
+14477	enigma	洛渝之南	1	m	enigma	2004-07-03 20:36:24	2007-07-13 14:13:03	\N	\N	enigma@test.com
+14486	pans	夜风	1	m	karasu1217	2004-07-03 20:53:50	2008-03-25 09:55:50	\N	\N	pans@test.com
+14502	-kodama	木霊	1	m	6454	2004-07-03 21:31:16	2006-02-19 14:20:54	\N	\N	-kodama@test.com
+14517	hoimi	Hoemi	1	m	evils	2004-07-03 22:05:46	2006-08-02 18:53:46	\N	\N	hoimi@test.com
+14531	takiyama	takiyama	1	m	qwerty	2004-07-03 23:04:42	2007-12-28 22:42:13	\N	\N	takiyama@test.com
+12553	yaho	夜歩	1	f	lillium	2004-07-01 12:35:26	2007-06-24 20:59:59.999	61	\N	yaho@test.com
+14553	goukon	翔雲	1	m	gaden584san3	2004-07-03 23:51:01	2008-03-25 09:29:44	\N	\N	goukon@test.com
+12985	ukjhsa	ukjhsa	1	m	770826aukj	2004-07-01 17:34:10	2006-05-18 13:35:40	61	\N	ukjhsa@test.com
+14723	toriatama	王夜猫	1	m	tatama	2004-07-04 16:53:23	2008-02-20 21:08:27	\N	\N	toriatama@test.com
+14733	hiro0252	虫仪	1	m	kasuga	2004-07-04 18:09:08	2006-07-06 15:03:22	\N	\N	hiro0252@test.com
+14744	-sorekima	专职水枪	1	m	ri703ku1219	2004-07-04 18:44:31	2006-02-19 21:44:15	\N	\N	-sorekima@test.com
+14756	Tomoe	冰雪纯儿	1	m	zurzeit	2004-07-04 19:27:44	2007-03-28 22:22:27	\N	\N	Tomoe@test.com
+14791	-alaf03	冰羽封印	1	m	andyamy	2004-07-04 21:37:47	2006-02-19 21:38:00	\N	\N	-alaf03@test.com
+14799	-kamome	不偷腥的猫	1	m	adjuscal	2004-07-04 22:06:15	2006-02-19 22:06:26	\N	\N	-kamome@test.com
+14829	-kadu	kadu	1	m	8011	2004-07-04 23:20:36	2006-02-19 23:36:02	\N	\N	-kadu@test.com
+14863	-OLDMAN2000	ALIN	1	m	7311	2004-07-05 01:02:27	2006-02-20 01:36:35	\N	\N	-OLDMAN2000@test.com
+14919	-Napoleon	Commander	1	m	corsica	2004-07-05 07:49:12	2006-02-21 21:28:57	\N	\N	-Napoleon@test.com
+15016	-polopolo29	polopolo29	1	m	pofeng	2004-07-05 17:01:43	2006-02-28 23:46:47	\N	\N	-polopolo29@test.com
+15029	ryuteitoku	冰橘	1	m	ryusousui	2004-07-05 17:57:51	2007-12-14 06:55:22	\N	\N	ryuteitoku@test.com
+15080	-Tetsuo	彼岸花	1	m	tk4649	2004-07-05 21:41:44	2006-02-26 22:40:54	\N	\N	-Tetsuo@test.com
+15169	-dx9900	真诚到永远	1	m	dx9900	2004-07-06 09:26:22	2006-02-27 14:26:53	\N	\N	-dx9900@test.com
+15195	vermilion	Lemington	1	m	fist1124	2004-07-06 13:09:17	2008-03-17 12:35:16	\N	\N	vermilion@test.com
+15217	dreamphixy	Fujiaga	1	m	cinkamail	2004-07-06 14:19:24	2007-05-08 11:42:44	\N	\N	dreamphixy@test.com
+15306	snow0	Ola尖下巴 	1	m	hisui0530	2004-07-06 19:41:03	2007-10-24 18:08:54	57	\N	snow0@test.com
+15336	blomein12	Zedize	1	m	bigstone	2004-07-06 21:11:35	2008-07-20 15:41:36	\N	\N	blomein12@test.com
+15339	poiu	海盗船长	1	m	poiu	2004-07-06 21:18:35	2008-01-22 00:39:05	\N	\N	poiu@test.com
+15344	waiwai1108	維維	1	m	waiwai1108	2004-07-06 21:31:14	2008-07-20 16:17:06	\N	\N	waiwai1108@test.com
+15363	kojiro215456	韩艾薇	1	m	omega0504	2004-07-06 22:03:54	2008-07-20 15:47:47	\N	\N	kojiro215456@test.com
+15403	-ziyangali	aliziyang	1	m	01221118	2004-07-07 00:35:49	2006-02-28 09:31:51	\N	\N	-ziyangali@test.com
+15443	-okokok	ミスラ風山の幸串焼	1	m	1579	2004-07-07 03:00:43	2006-04-23 03:18:39	\N	\N	-okokok@test.com
+15444	-Darkjoker	Darkjoker	1	m	7852396541	2004-07-07 03:14:23	2006-02-22 03:14:59	\N	\N	-Darkjoker@test.com
+15450	yesgoto	紫藤	1	m	gotoya	2004-07-07 04:44:06	2007-08-18 22:56:47	\N	\N	yesgoto@test.com
+15469	-JEEJEE	JEEJEE	1	m	901343	2004-07-07 08:44:44	2006-02-22 23:51:58	\N	\N	-JEEJEE@test.com
+15499	-EDEDOED	孤行衣	1	f	86607247	2004-07-07 13:27:16	2006-02-22 15:36:49	\N	\N	-EDEDOED@test.com
+15528	attokunDX	Punix	1	m	15790202	2004-07-07 15:43:28	2007-02-22 15:05:19	\N	\N	attokunDX@test.com
+15564	Stick	禁忌	1	m	u4mjcrvp	2004-07-07 17:45:21	2008-02-17 10:43:43	\N	\N	Stick@test.com
+15582	-sssaammm	追憶尋影	1	m	12345678	2004-07-07 18:31:26	2006-02-22 18:31:36	\N	\N	-sssaammm@test.com
+15605	-maniadayo	MEGADETH	1	m	3150dayone	2004-07-07 20:54:23	2007-05-01 05:11:29	\N	\N	-maniadayo@test.com
+15616	MOMOZC	MOMOZC	1	m	901343	2004-07-07 21:39:28	2006-05-14 19:04:00	\N	\N	MOMOZC@test.com
+15680	1234	無聊人	1	m	1234	2004-07-08 01:44:30	2008-03-24 12:33:21	\N	\N	1234@test.com
+15718	nalzgis	艶凰姫	1	m	filly	2004-07-08 04:53:21	2007-11-19 01:34:22	\N	\N	nalzgis@test.com
+15795	-yumi	赵晶尧	1	m	kenji	2004-07-08 16:38:36	2006-02-23 21:26:31	\N	\N	-yumi@test.com
+15862	yajiv6	Zee.K	1	m	yaji5963	2004-07-08 21:42:15	2007-04-11 14:28:44	\N	\N	yajiv6@test.com
+15876	hiroshi	雨吻花	1	m	hiroushi	2004-07-08 23:23:30	2008-03-03 16:48:03	\N	\N	hiroshi@test.com
+15891	-ashsieve	youyou	1	m	youyou0	2004-07-09 00:36:54	2006-05-02 00:50:44	\N	\N	-ashsieve@test.com
+15897	aaaa	ＥＲＵ	1	m	aaaa	2004-07-09 01:17:20	2008-03-25 11:13:51	\N	\N	aaaa@test.com
+15924	-baloth	baloth	1	f	amanosyo	2004-07-09 06:58:44	2006-03-14 22:39:31	\N	\N	-baloth@test.com
+15927	-mind	心池瑶园	1	m	kibogaoka	2004-07-09 08:40:18	2006-02-24 08:42:19	\N	\N	-mind@test.com
+15935	kirissa	幼刀長那褄	1	f	siasia	2004-07-09 12:15:14	2008-02-29 11:01:17	\N	\N	kirissa@test.com
+16495	-9639614	紅の黒猫	1	m	963961	2004-07-12 16:29:43	2006-03-04 15:42:34	\N	\N	-9639614@test.com
+16506	-hitoshine	蒼の青	1	m	1010	2004-07-12 18:08:26	2006-05-08 20:55:42	\N	\N	-hitoshine@test.com
+16560	korekawa	銀蔵	1	m	oznig2004	2004-07-12 21:44:33	2007-08-12 22:30:32	\N	\N	korekawa@test.com
+12518	kunisada	sada	2	m	1307036	2004-07-01 12:30:29	2009-05-03 18:27:23	\N	3	kunisada@test.com
+12533	-carbon	CARBON	1	m	nakazawa	2004-07-01 12:32:34	2006-02-16 12:32:42	\N	1	Kuon@test.com\n
+12693	ccfactory	ccfactory	1	f	5190115	2004-07-01 13:37:06	2008-07-21 21:52:36	61	1	ccfactory@test.com
+14612	masamune01	藍牙	1	m	0030	2004-07-04 07:25:58	2008-07-20 15:49:33	\N	\N	masamune01@test.com
+15949	-doncyan	NeoNeo	1	m	doncyan0313	2004-07-09 13:34:44	2007-03-27 22:20:22	\N	\N	-doncyan@test.com
+15953	-keymy	終極之劍	1	m	dc9v	2004-07-09 13:49:13	2006-03-01 21:33:53	\N	\N	-keymy@test.com
+15975	s88008	s88008	1	m	14537	2004-07-09 17:02:06	2008-02-22 20:12:25	\N	\N	s88008@test.com
+15980	rakan	狩眞	1	m	reikouzan	2004-07-09 17:33:40	2008-01-23 12:28:37	\N	\N	rakan@test.com
+16046	NiceStick	紫宛	1	m	u4mjcrvp	2004-07-10 00:39:26	2008-02-10 20:21:16	\N	\N	NiceStick@test.com
+16049	altoblue	火锅姑娘儿	1	m	SAWADA11	2004-07-10 00:51:13	2008-03-24 20:03:06	\N	\N	altoblue@test.com
+13628	dist	mujernini	1	m	toraha132	2004-07-02 01:10:57	2007-12-26 00:00:18	61	\N	dist@test.com
+12509	aiger	高星	1	m	998tamo	2004-07-01 12:29:37	2008-07-30 12:42:25	61	\N	aiger@test.com
+12516	sasame	我有我方向	2	m	light	2004-07-01 12:30:13	2009-06-06 14:21:09	\N	\N	sasame@test.com
+12709	blonwin	星期天大街	1	m	59635963	2004-07-01 13:44:36	2008-01-18 03:40:59	61	1	blonwin@test.com
+12566	rektangle	anne zhang	1	m	dfghj	2004-07-01 12:37:01	2009-07-06 19:28:06	61	\N	rektangle@test.com
+12637	wind	sky~愛得代價	1	m	1750	2004-07-01 13:03:34	2008-03-22 18:45:05	\N	\N	wind@test.com
+12657	-tanmanhin	約西亞	1	m	e25152203	2004-07-01 13:16:22	2006-02-19 17:17:28	\N	\N	-tanmanhin@test.com
+12667	-nmdgjp	龍聾	1	m	rakku	2004-07-01 13:20:39	2006-04-20 20:39:18	\N	\N	-nmdgjp@test.com
+12673	yuuki	Joyce	1	m	elfir	2004-07-01 13:23:43	2006-05-29 00:25:43	61	\N	yuuki@test.com
+12723	-ok416	佐藤	1	m	ok416	2004-07-01 13:53:59	2006-02-16 13:54:19	\N	\N	-ok416@test.com
+12730	tera	tera	1	m	tera5743	2004-07-01 13:58:44	2006-05-14 08:53:58	61	\N	tera@test.com
+12745	nob9814	LiLiTeA	1	m	nobnob9814	2004-07-01 14:12:07	2009-06-29 17:11:33	\N	\N	nob9814@test.com
+12755	-edger	edger	1	m	hagisono	2004-07-01 14:21:44	2006-03-22 07:47:40	61	\N	-edger@test.com
+12762	shamanking24	shamanking	1	m	y6542266	2004-07-01 14:32:25	2009-07-06 18:44:28	61	\N	shamanking24@test.com
+12771	-Akuma99	漢字	1	m	caryy	2004-07-01 14:37:57	2006-02-16 14:38:11	61	\N	-Akuma99@test.com
+12783	-kiffy1	KevinI	1	f	ryu3asef	2004-07-01 14:44:10	2006-02-24 21:21:36	61	\N	-kiffy1@test.com
+12784	-awake	Awake	1	m	awake12	2004-07-01 14:44:41	2006-11-24 08:20:37	61	\N	-awake@test.com
+12793	-spitzayaya	spitzayaya	1	m	spitzayaya	2004-07-01 14:49:06	2006-04-06 23:12:50	61	\N	-spitzayaya@test.com
+12814	12271227	麗羅	1	m	12271227	2004-07-01 15:09:31	2008-07-21 22:47:40	61	\N	12271227@test.com
+12816	-WHOWHO	IRENE	1	f	09220223	2004-07-01 15:11:18	2006-02-18 15:14:54	61	\N	-WHOWHO@test.com
+12849	arsh	arsh	1	m	poizonn1415	2004-07-01 15:35:39	2008-08-31 14:28:28	61	\N	arsh@test.com
+12874	Vigilance	Acarno	1	m	VigilA	2004-07-01 15:59:51	2007-02-23 06:48:46	61	\N	Vigilance@test.com
+15046	Kaldra	Phage	1	f	theworld	2004-07-05 19:13:26	2007-09-10 12:43:26	\N	\N	Kaldra@test.com
+12586	-culd2	culd2	1	m	p9r6ff3x	2004-07-01 12:40:21	2006-02-16 12:44:55	61	2	1111@test.com
+12506	wonton	阙歌	1	m	0511	2004-07-01 12:29:13	2008-10-23 13:06:24	\N	1	wonton@test.com
+12512	breezebard	SeVenHc	1	m	3214106e	2004-07-01 12:29:53	2008-07-13 17:28:07	\N	1	breezebard@test.com
+12525	kuon	Nicol	1	m	kloi	2004-07-01 12:31:12	2008-07-07 12:57:07	\N	1	kuon@test.com
+12529	turbozero	白衬衣	1	m	trust40s	2004-07-01 12:32:16	2008-03-19 13:29:20	61	1	turbozero@test.com
+12548	kamui	kamui	1	m	noise	2004-07-01 12:34:39	2008-03-25 01:05:06	61	3	kamui@test.com
+13019	buster0083	bug_zone	1	m	sleep5	2004-07-01 18:07:41	2007-09-22 19:37:25	61	\N	buster0083@test.com
+12718	339-339	Katrina Lee	1	f	336336	2004-07-01 13:49:54	2006-12-29 17:43:15	\N	\N	339339@test.com
+12966	zero-3719	spring	1	m	zero3719	2004-07-01 17:24:00	2008-07-20 14:43:03	61	2	zero3719@test.com
+12923	draglion	赛穆尔	1	m	1q2w3e	2004-07-01 16:48:48	2009-07-07 11:55:51	61	1	draglion@test.com
+12862	-c1000	徘徊的影子	1	m	13142641	2004-07-01 15:49:57	2007-01-29 14:47:12	61	\N	1111@test.com
+12715	haka1s1n	队长阿迪	1	m	0t0s1mae	2004-07-01 13:49:04	2009-07-07 12:14:45	61	\N	haka1s1n@test.com
+12725	cremona	晃晃悠悠	1	m	sin715	2004-07-01 13:55:31	2006-11-18 02:31:57	\N	\N	cremona@test.com
+12727	ikacchi	Opeth	1	m	ikacchi29	2004-07-01 13:56:47	2007-05-23 23:33:22	\N	\N	ikacchi@test.com
+12728	masayoshi	风儿	1	m	techgear	2004-07-01 13:57:17	2008-03-16 20:25:55	\N	\N	masayoshi@test.com
+12752	fortuneteller	可可?西里	1	f	hanya88	2004-07-01 14:18:23	2008-03-10 22:20:57	61	\N	fortuneteller@test.com
+12787	syouno	DejaVu	1	m	masayuki	2004-07-01 14:46:09	2007-11-18 06:10:25	61	\N	syouno@test.com
+12794	dantyou	心之归处	1	m	sunloveFPe9	2004-07-01 14:49:19	2008-03-24 05:36:00	61	\N	dantyou@test.com
+12800	ayako	失落的苦乐果	1	f	dex268	2004-07-01 14:54:54	2008-03-24 12:02:06	61	\N	ayako@test.com
+12838	-sannkusu	David-owen	1	m	123a	2004-07-01 15:25:55	2006-02-16 15:26:14	61	\N	-sannkusu@test.com
+12843	riyode182	身下…	1	m	aubykddi	2004-07-01 15:29:24	2009-07-06 18:45:49	61	\N	riyode182@test.com
+12891	r286kei190	姬芮	1	m	uime4ulg9	2004-07-01 16:15:20	2009-07-06 18:46:16	61	\N	r286kei190@test.com
+12900	madcat	逍遥自在	1	m	madcatv3	2004-07-01 16:25:58	2007-07-24 14:47:01	61	\N	madcat@test.com
+12904	ayuayu	黑白茶馆\n黑白茶馆	1	m	2501	2004-07-01 16:28:54	2009-07-26 18:23:20	61	\N	ayuayu@test.com
+12953	-tsuchiya	小野Nellie	1	m	103314a	2004-07-01 17:15:04	2008-06-11 16:12:37	61	\N	-tsuchiya@test.com
+12992	-tachibana	橘薫	1	m	3654	2004-07-01 17:42:01	2006-02-21 06:25:08	61	\N	-tachibana@test.com
+12997	ugfues	Bissmallck	1	m	dtd90e	2004-07-01 17:48:49	2009-07-07 11:56:13	61	\N	ugfues@test.com
+12998	bird	宝龍	1	m	2066	2004-07-01 17:50:10	2007-04-20 08:23:45	61	\N	bird@test.com
+13027	adlodust	旅法師	1	m	osirisxadol2	2004-07-01 18:10:47	2007-10-30 01:01:05	61	\N	adlodust@test.com
+13043	-getsuya	紫月	1	f	1234	2004-07-01 18:24:31	2006-03-10 13:45:39	61	\N	-getsuya@test.com
+13048	makumanaman0	Valencia	1	m	28282828282828	2004-07-01 18:27:54	2008-03-13 12:42:50	61	\N	makumanaman0@test.com
+15241	dictionary	Theno	1	m	dictionary55	2004-07-06 15:24:28	2007-10-15 11:57:10	\N	\N	dictionary@test.com
+14556	AS1983GolPla	獅子道	1	m	moti2heso	2004-07-03 23:59:35	2008-07-20 15:51:41	\N	\N	AS1983GolPla@test.com
+14567	donaludo	田吾作	1	m	donaludo3	2004-07-04 00:38:41	2006-12-23 22:13:59	\N	\N	donaludo@test.com
+14598	-korokoro108	披着迷彩的北极熊	1	m	korokane108	2004-07-04 04:08:11	2006-02-19 19:29:15	\N	\N	-korokoro108@test.com
+14606	Nayuta	那由他	1	m	zurzeit	2004-07-04 05:28:59	2007-03-28 22:25:38	\N	\N	Nayuta@test.com
+14610	-hellfire	green	1	m	19770119	2004-07-04 06:30:55	2006-02-19 06:31:12	\N	\N	-hellfire@test.com
+14660	ryotanakaya2704	蓝灵儿	1	m	nakaya2704	2004-07-04 13:06:17	2008-03-12 17:44:54	\N	\N	ryotanakaya2704@test.com
+14669	-santo	nmnmaa	1	m	aaaaaa	2004-07-04 13:25:23	2006-02-19 13:25:39	\N	\N	-santo@test.com
+14676	-poipoi	SOTEC	1	m	123a	2004-07-04 13:53:25	2006-02-24 01:53:01	\N	\N	-poipoi@test.com
+14705	-didi	didi	1	m	8MjV4op	2004-07-04 15:50:01	2006-02-25 13:03:46	\N	\N	-didi@test.com
+12751	-werck	werck	1	m	710659	2004-07-01 14:17:40	2006-02-16 16:12:31	61	\N	nice@test.com
+12601	2222	2222	1	m	4513	2004-07-01 12:43:59	2008-01-17 19:46:03	61	\N	1111@test.com
+12647	STEELDORAGON	非哥	1	m	RYUEI3	2004-07-01 13:12:35	2008-02-13 22:44:43	61	\N	STEELDORAGON@test.com
+12999	TAKKU	星空	1	m	takku2728	2004-07-01 17:53:27	2007-11-19 00:17:16	61	\N	TAKKU@test.com
+13546	papaiya	久之坏香\n久之坏香	1	m	suzuki	2004-07-02 00:25:36	2007-10-05 16:39:39	61	\N	papaiya@test.com
+13695	koidekatuyuk	無情の淚	1	m	koide1980	2004-07-02 03:57:36	2007-07-30 13:49:36	61	\N	koidekatuyuk@test.com
+13738	heibon	李可兒	1	m	cx54d456	2004-07-02 09:40:14	2007-08-03 12:55:19	61	\N	heibon@test.com
+13747	ment01	詩文敗類	1	m	0001	2004-07-02 10:22:24	2008-10-23 12:03:35	61	\N	ment01@test.com
+13750	sisimaru	獅子丸	1	m	12121212	2004-07-02 12:02:29	2007-03-23 10:47:26	61	\N	sisimaru@test.com
+13751	seto4274	?AIR?	1	m	seto	2004-07-02 12:03:06	2007-05-13 00:18:06	61	\N	seto4274@test.com
+13752	easternyouth	eastern	1	m	13955931	2004-07-02 12:03:30	2007-05-13 00:16:39	61	\N	easternyouth@test.com
+13757	redsheep	ゼッフル	1	m	gandamu	2004-07-02 12:11:32	2007-11-11 19:23:14	61	\N	redsheep@test.com
+13760	-isihara	★乃湖☆	1	m	satoukibidesu	2004-07-02 12:18:58	2006-02-17 12:25:58	61	\N	-isihara@test.com
+13772	yasutoshi	kyouri	1	m	4444	2004-07-02 12:48:47	2007-03-15 04:13:01	61	\N	yasutoshi@test.com
+13795	LBAB6231	鼻涕猪	1	m	sre750	2004-07-02 13:25:53	2008-07-20 15:55:52	\N	\N	LBAB6231@test.com
+13879	-vyega	空的秋千~	1	m	1313	2004-07-02 15:46:02	2006-02-22 14:09:25	61	\N	-vyega@test.com
+13032	Chomisan	格桑岔武	1	m	Failicsyan	2004-07-01 18:14:11	2007-07-16 23:02:52	61	\N	Chomisan@test.com
+13088	0056	夏夜微风	1	m	0056	2004-07-01 18:56:22	2008-02-28 17:20:16	61	\N	0056@test.com
+13112	-hell	似兰斯馨	1	m	deldeldai	2004-07-01 19:13:30	2006-02-16 19:13:38	61	\N	-hell@test.com
+13118	-tarou	一路向楠	1	m	tatata	2004-07-01 19:17:48	2006-03-08 18:02:09	61	\N	-tarou@test.com
+13125	zakisan	慕先生	1	m	zakizaki	2004-07-01 19:28:14	2008-03-22 04:23:36	61	\N	zakisan@test.com
+13137	kageyamahikaru	超越零点	1	m	tensuke	2004-07-01 19:44:18	2009-07-07 12:11:17	61	\N	kageyamahikaru@test.com
+13170	hondasoh	Johnson	1	m	7970	2004-07-01 20:21:02	2009-07-07 12:13:13	61	\N	hondasoh@test.com
+13312	CallofCHAOS	七色孔雀	1	m	7thCHAOTICS	2004-07-01 21:57:59	2008-03-24 23:01:03	61	\N	CallofCHAOS@test.com
+13330	sekihara	seki	1	m	yohikarisetuna	2004-07-01 22:13:46	2008-03-25 00:08:28	61	\N	sekihara@test.com
+13333	kohaku	琥白	1	m	yakumo	2004-07-01 22:16:01	2007-05-03 11:40:56	61	\N	kohaku@test.com
+13382	LANM	LANM	1	m	autoexec	2004-07-01 22:39:06	2007-04-09 13:41:45	61	\N	LANM@test.com
+13383	-a8813053	Yuda	1	m	barkley	2004-07-01 22:39:35	2006-02-20 08:38:55	61	\N	-a8813053@test.com
+13388	aaa10291029	SEABREEZE	1	m	1107	2004-07-01 22:41:10	2009-07-06 18:47:50	61	\N	aaa10291029@test.com
+13405	inku	百虎	1	m	a789374	2004-07-01 22:56:16	2008-03-06 01:38:03	61	\N	inku@test.com
+13426	fugi	天下布武	1	m	5963	2004-07-01 23:12:30	2008-01-25 14:59:16	61	\N	fugi@test.com
+13445	yozkun0	陽座	1	m	yoz1700	2004-07-01 23:23:46	2008-03-23 20:20:55	61	\N	yozkun0@test.com
+13450	TP01	TP01	1	m	tppass	2004-07-01 23:25:30	2008-07-20 14:59:45	61	\N	TP01@test.com
+13492	doddy	平目大先生	1	m	fishman	2004-07-01 23:49:09	2008-03-25 00:32:54	61	\N	doddy@test.com
+13501	-bearkiller	熊殺大將軍	1	m	691022	2004-07-01 23:55:04	2006-02-17 12:27:36	61	\N	-bearkiller@test.com
+13536	gokuri	獄吏	1	m	gokuri	2004-07-02 00:20:04	2008-01-16 23:52:47	61	\N	gokuri@test.com
+13549	gedo4242	strafl	1	m	a1v2c3d4	2004-07-02 00:26:48	2008-03-24 14:25:06	61	\N	gedo4242@test.com
+13575	densetu824	桐霧	1	m	300701	2004-07-02 00:39:08	2007-03-19 02:30:50	61	\N	densetu824@test.com
+13622	-ices28	TACO03	1	m	dxi013	2004-07-02 01:02:59	2006-02-17 13:08:15	61	\N	-ices28@test.com
+13631	121401	Marionette	1	m	youhei	2004-07-02 01:18:23	2008-07-20 16:00:05	61	\N	121401@test.com
+13644	masahiro	mizuki	1	m	231855	2004-07-02 01:55:16	2007-11-28 10:39:45	61	\N	masahiro@test.com
+13657	-windycg	夜月真紅	1	m	000000	2004-07-02 02:28:57	2006-02-17 02:29:15	61	\N	-windycg@test.com
+13690	-yan00	yan00	1	m	697727	2004-07-02 03:35:33	2006-02-21 19:09:23	61	\N	-yan00@test.com
+13693	setsuya	雪夜	1	m	1208sh	2004-07-02 03:50:11	2007-12-14 23:36:35	\N	\N	setsuya@test.com
+15171	eshiko	紗凪	1	m	dyna2235	2004-07-06 12:10:42	2007-03-28 10:28:00	\N	\N	eshiko@test.com
+13069	-kusanagi	恵潤	1	m	motoko	2004-07-01 18:48:06	2006-02-17 19:02:16	61	\N	-kusanagi@test.com
+13077	sukorupio3536	sukorupio	1	m	zyemini32961	2004-07-01 18:52:35	2007-04-09 18:42:13	61	\N	sukorupio3536@test.com
+13101	-Rainhato	Slayer	1	m	templar	2004-07-01 19:04:06	2006-03-02 16:42:09	61	\N	-Rainhato@test.com
+13113	angelnight	Reinfols	1	m	zzzzzz	2004-07-01 19:13:46	2008-03-24 17:27:59	61	\N	angelnight@test.com
+13132	-FIGO	FIGO	1	m	4622772959	2004-07-01 19:39:21	2006-02-16 20:24:21	61	\N	-FIGO@test.com
+13139	-mistey	麻宮寝夢	1	m	kumegumi	2004-07-01 19:47:50	2006-03-28 13:47:11	61	\N	-mistey@test.com
+13143	-lokrix	lokrix	1	m	thomas17	2004-07-01 19:51:18	2006-02-16 19:57:08	61	\N	-lokrix@test.com
+13192	-dragon01	龍月痕1	1	m	0019780324	2004-07-01 20:45:22	2006-04-14 18:32:21	61	\N	-dragon01@test.com
+13194	Shining	小孩儿--郭宁	1	m	pearl	2004-07-01 20:46:38	2009-07-07 11:57:12	61	\N	Shining@test.com
+13212	greenimp	gaga	1	m	ph1984	2004-07-01 20:59:44	2006-06-06 01:07:55	61	\N	greenimp@test.com
+13215	Mikado	Mikado	1	m	19761015	2004-07-01 21:02:08	2008-01-29 23:00:26	61	\N	Mikado@test.com
+13216	52725	黒兎	1	m	321123	2004-07-01 21:02:27	2009-07-06 18:47:00	61	\N	52725@test.com
+13220	3mido	周防	1	m	nekoni	2004-07-01 21:06:40	2007-09-22 10:02:45	61	\N	3mido@test.com
+13222	4mido	蘇芳	1	m	nekoni	2004-07-01 21:07:57	2008-03-18 18:09:29	61	\N	4mido@test.com
+13234	-sakuraryou	lil Way	1	m	deserteagle	2004-07-01 21:16:04	2006-03-21 12:12:03	61	\N	-sakuraryou@test.com
+13238	RedEyes	RedEyes	1	m	sada470505	2004-07-01 21:18:57	2007-02-15 02:01:01	61	\N	RedEyes@test.com
+13251	airsea87	瑠雪	1	m	luyuki127	2004-07-01 21:24:55	2007-02-22 21:27:05	61	\N	airsea87@test.com
+13273	-player02	ALICE	1	f	darkness	2004-07-01 21:35:01	2006-04-18 16:46:20	61	\N	-player02@test.com
+13301	0797	八百里秦川	1	m	0797	2004-07-01 21:52:22	2008-02-27 23:08:27	61	\N	0797@test.com
+13353	adyrt	流苏	1	m	0818	2004-07-01 22:26:20	2007-12-21 21:48:17	61	\N	adyrt@test.com
+13372	eyezack	biubiu	1	m	zackwill	2004-07-01 22:34:59	2007-12-30 21:10:44	61	\N	eyezack@test.com
+13401	-UNY342	花随风过	1	m	43124312	2004-07-01 22:50:24	2006-02-17 19:43:10	61	\N	-UNY342@test.com
+13418	strontium	痘痘爱辣椒	1	m	19870621	2004-07-01 23:08:30	2007-03-23 15:19:53	61	\N	strontium@test.com
+13448	FXTOM	佳音子	1	m	dorami16	2004-07-01 23:25:20	2007-12-05 01:19:21	61	\N	FXTOM@test.com
+13471	nekojaxa	姚宇阳	1	m	nekodesu	2004-07-01 23:34:42	2008-03-13 13:11:24	61	\N	nekojaxa@test.com
+13566	AMUAMU	一步远的天堂	1	m	amu1126	2004-07-02 00:35:23	2007-03-23 16:38:34	61	\N	AMUAMU@test.com
+14977	Lemington	蓝色国槐	1	m	fist1124	2004-07-05 14:02:07	2008-03-17 12:12:39	\N	\N	Lemington@test.com
+12958	-jinjer	jinjer	1	m	123456	2004-07-01 17:18:46	2006-04-11 12:35:34	61	3	-jinjer@test.com
+12697	-ices	煎餃	1	m	dxi013	2004-07-01 13:39:47	2006-02-16 17:59:26	61	1	-ices@test.com
+12698	wwetaker	wwetaker	1	m	rarara	2004-07-01 13:39:59	2007-03-07 14:10:00	61	1	wwetaker@test.com
+12699	disorder	アルフィナ七罪紗也加	1	m	justice	2004-07-01 13:40:17	2008-03-14 01:58:09	61	1	disorder@test.com
+12710	lmdass	羅天	1	m	lmdass1987	2004-07-01 13:45:43	2008-06-24 22:53:58	61	1	lmdass@test.com
+12980	azu8935910	azu193159	1	m	8935910	2004-07-01 17:33:29	2008-07-20 14:45:06	61	2	azu8935910@test.com
+12961	Darkness	Serra	1	f	theworld	2004-07-01 17:21:41	2007-11-26 17:33:33	61	3	Darkness@test.com
+12937	-lancelance	SEASONS	1	m	77757775	2004-07-01 16:56:53	2006-02-27 12:48:31	61	1	-lancelance@test.com
+12919	Nice	香麟	1	m	u4mjcrvp	2004-07-01 16:45:17	2007-11-15 19:05:08	61	2	Nice@test.com
+12907	pipi	pipi	1	m	pipipipi	2004-07-01 16:33:08	2008-07-30 20:34:56	61	3	pipi@test.com
+12511	ruke	ruke	1	m	takuya	2004-07-01 12:29:45	2008-07-07 12:46:07	\N	\N	ruke@test.com
+12515	zono282000	Forth	1	m	ff59901	2004-07-01 12:30:05	2008-06-28 16:41:15	\N	\N	zono282000@test.com
+12596	fenrir	fenrir	1	m	fenrir	2004-07-01 12:42:47	2008-07-08 18:18:36	61	\N	fenrir@test.com
+12606	saidem	九龍	1	m	tokai	2004-07-01 12:46:13	2006-05-14 17:10:14	61	\N	saidem@test.com
+12608	smsc	ＥＥ	1	m	phantom	2004-07-01 12:46:33	2008-02-22 14:53:10	\N	\N	smsc@test.com
+12612	-lizardglasses	蜥蜴眼鏡	1	m	karosameri	2004-07-01 12:49:04	2006-02-16 14:43:42	61	\N	-lizardglasses@test.com
+12619	pulad	pulad	1	m	LZSecret	2004-07-01 12:53:08	2007-11-14 23:28:04	\N	\N	pulad@test.com
+12531	yusuke	慕紫宝贝	1	m	y564822	2004-07-01 12:32:28	2008-06-14 19:05:26	\N	1	yusuke@test.com
+12538	weit	天使的眼泪	1	m	r2d3k2l9	2004-07-01 12:33:16	2008-03-23 13:41:22	\N	1	weit@test.com
+12539	marlyng	远山	1	m	m9an3k1o	2004-07-01 12:33:18	2009-02-09 20:28:27	\N	1	marlyng@test.com
+12542	verytuth	红袖添香	1	m	b3XD7Y9RPQ	2004-07-01 12:33:24	2009-02-11 18:07:12	\N	3	verytuth@test.com
+12563	millia	踏雪幽梦	1	m	millia	2004-07-01 12:36:39	2008-06-14 20:46:09	61	3	millia@test.com
+12579	lastdomination	嶼神劉	1	f	kawa0831	2004-07-01 12:38:23	2008-03-19 13:57:25	61	3	lastdomination@test.com
+12594	eluesith	浪客剑心	1	m	5946213	2004-07-01 12:42:14	2009-07-06 19:28:37	61	2	eluesith@test.com
+12597	deguchi	Charlene~	1	m	mistymist	2004-07-01 12:43:02	2008-07-08 17:19:29	61	2	deguchi@test.com
+12603	kogane23	星晴	1	m	koganeo23	2004-07-01 12:45:11	2009-07-06 18:42:57	61	2	kogane23@test.com
+\.
+
+
+--
+-- Data for Name: dt_account_info; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY dt_account_info (account_id, exer_level, experience_point, win_count, lose_count, draw_count, last_battle_date, exer_comment) FROM stdin;
+12511	1	0	0	0	0	\N	\N
+12515	1	0	0	0	0	\N	\N
+12516	1	0	0	0	0	\N	\N
+12518	1	0	0	0	0	\N	\N
+12519	1	0	0	0	0	\N	\N
+12522	1	0	0	0	0	\N	\N
+12525	1	0	0	0	0	\N	\N
+12529	1	0	0	0	0	\N	\N
+12531	1	0	0	0	0	\N	\N
+12533	1	0	0	0	0	\N	\N
+12538	1	0	0	0	0	\N	\N
+12539	1	0	0	0	0	\N	\N
+12542	1	0	0	0	0	\N	\N
+12543	1	0	0	0	0	\N	\N
+12548	1	0	0	0	0	\N	\N
+12552	1	0	0	0	0	\N	\N
+12553	1	0	0	0	0	\N	\N
+12563	1	0	0	0	0	\N	\N
+12566	1	0	0	0	0	\N	\N
+12579	1	0	0	0	0	\N	\N
+12585	1	0	0	0	0	\N	\N
+12586	1	0	0	0	0	\N	\N
+12596	1	0	0	0	0	\N	\N
+12601	1	0	0	0	0	\N	\N
+12603	1	0	0	0	0	\N	\N
+12606	1	0	0	0	0	\N	\N
+12608	1	0	0	0	0	\N	\N
+12612	1	0	0	0	0	\N	\N
+12619	1	0	0	0	0	\N	\N
+12625	1	0	0	0	0	\N	\N
+12628	1	0	0	0	0	\N	\N
+12635	1	0	0	0	0	\N	\N
+12637	1	0	0	0	0	\N	\N
+12647	1	0	0	0	0	\N	\N
+12657	1	0	0	0	0	\N	\N
+12665	1	0	0	0	0	\N	\N
+12667	1	0	0	0	0	\N	\N
+12671	1	0	0	0	0	\N	\N
+12673	1	0	0	0	0	\N	\N
+12692	1	0	0	0	0	\N	\N
+12693	1	0	0	0	0	\N	\N
+12697	1	0	0	0	0	\N	\N
+12698	1	0	0	0	0	\N	\N
+12709	1	0	0	0	0	\N	\N
+12710	1	0	0	0	0	\N	\N
+12715	1	0	0	0	0	\N	\N
+12718	1	0	0	0	0	\N	\N
+12723	1	0	0	0	0	\N	\N
+12725	1	0	0	0	0	\N	\N
+12727	1	0	0	0	0	\N	\N
+12728	1	0	0	0	0	\N	\N
+12730	1	0	0	0	0	\N	\N
+12745	1	0	0	0	0	\N	\N
+12751	1	0	0	0	0	\N	\N
+12752	1	0	0	0	0	\N	\N
+12755	1	0	0	0	0	\N	\N
+12762	1	0	0	0	0	\N	\N
+12771	1	0	0	0	0	\N	\N
+12783	1	0	0	0	0	\N	\N
+12784	1	0	0	0	0	\N	\N
+12787	1	0	0	0	0	\N	\N
+12793	1	0	0	0	0	\N	\N
+12794	1	0	0	0	0	\N	\N
+12800	1	0	0	0	0	\N	\N
+12814	1	0	0	0	0	\N	\N
+12816	1	0	0	0	0	\N	\N
+12838	1	0	0	0	0	\N	\N
+12843	1	0	0	0	0	\N	\N
+12849	1	0	0	0	0	\N	\N
+12862	1	0	0	0	0	\N	\N
+12874	1	0	0	0	0	\N	\N
+12891	1	0	0	0	0	\N	\N
+12900	1	0	0	0	0	\N	\N
+12904	1	0	0	0	0	\N	\N
+12907	1	0	0	0	0	\N	\N
+12910	1	0	0	0	0	\N	\N
+12919	1	0	0	0	0	\N	\N
+12923	1	0	0	0	0	\N	\N
+12937	1	0	0	0	0	\N	\N
+12953	1	0	0	0	0	\N	\N
+12958	1	0	0	0	0	\N	\N
+12961	1	0	0	0	0	\N	\N
+12966	1	0	0	0	0	\N	\N
+12980	1	0	0	0	0	\N	\N
+12985	1	0	0	0	0	\N	\N
+12992	1	0	0	0	0	\N	\N
+12997	1	0	0	0	0	\N	\N
+12998	1	0	0	0	0	\N	\N
+12999	1	0	0	0	0	\N	\N
+13007	1	0	0	0	0	\N	\N
+13019	1	0	0	0	0	\N	\N
+13027	1	0	0	0	0	\N	\N
+13032	1	0	0	0	0	\N	\N
+13043	1	0	0	0	0	\N	\N
+13048	1	0	0	0	0	\N	\N
+13069	1	0	0	0	0	\N	\N
+13077	1	0	0	0	0	\N	\N
+13088	1	0	0	0	0	\N	\N
+13101	1	0	0	0	0	\N	\N
+13112	1	0	0	0	0	\N	\N
+13113	1	0	0	0	0	\N	\N
+13118	1	0	0	0	0	\N	\N
+13125	1	0	0	0	0	\N	\N
+13132	1	0	0	0	0	\N	\N
+13137	1	0	0	0	0	\N	\N
+13139	1	0	0	0	0	\N	\N
+13143	1	0	0	0	0	\N	\N
+13170	1	0	0	0	0	\N	\N
+13192	1	0	0	0	0	\N	\N
+13194	1	0	0	0	0	\N	\N
+13212	1	0	0	0	0	\N	\N
+13215	1	0	0	0	0	\N	\N
+13216	1	0	0	0	0	\N	\N
+13220	1	0	0	0	0	\N	\N
+13222	1	0	0	0	0	\N	\N
+13234	1	0	0	0	0	\N	\N
+13238	1	0	0	0	0	\N	\N
+13251	1	0	0	0	0	\N	\N
+13273	1	0	0	0	0	\N	\N
+13301	1	0	0	0	0	\N	\N
+13312	1	0	0	0	0	\N	\N
+13330	1	0	0	0	0	\N	\N
+13333	1	0	0	0	0	\N	\N
+13353	1	0	0	0	0	\N	\N
+13372	1	0	0	0	0	\N	\N
+13382	1	0	0	0	0	\N	\N
+13383	1	0	0	0	0	\N	\N
+13388	1	0	0	0	0	\N	\N
+13401	1	0	0	0	0	\N	\N
+13405	1	0	0	0	0	\N	\N
+13418	1	0	0	0	0	\N	\N
+13426	1	0	0	0	0	\N	\N
+13445	1	0	0	0	0	\N	\N
+13448	1	0	0	0	0	\N	\N
+13450	1	0	0	0	0	\N	\N
+13471	1	0	0	0	0	\N	\N
+13492	1	0	0	0	0	\N	\N
+13501	1	0	0	0	0	\N	\N
+13536	1	0	0	0	0	\N	\N
+13546	1	0	0	0	0	\N	\N
+13549	1	0	0	0	0	\N	\N
+13566	1	0	0	0	0	\N	\N
+13575	1	0	0	0	0	\N	\N
+13622	1	0	0	0	0	\N	\N
+13628	1	0	0	0	0	\N	\N
+13631	1	0	0	0	0	\N	\N
+13644	1	0	0	0	0	\N	\N
+13657	1	0	0	0	0	\N	\N
+13690	1	0	0	0	0	\N	\N
+13693	1	0	0	0	0	\N	\N
+13695	1	0	0	0	0	\N	\N
+13738	1	0	0	0	0	\N	\N
+13747	1	0	0	0	0	\N	\N
+13750	1	0	0	0	0	\N	\N
+13751	1	0	0	0	0	\N	\N
+13752	1	0	0	0	0	\N	\N
+13757	1	0	0	0	0	\N	\N
+13760	1	0	0	0	0	\N	\N
+13772	1	0	0	0	0	\N	\N
+13795	1	0	0	0	0	\N	\N
+13879	1	0	0	0	0	\N	\N
+13894	1	0	0	0	0	\N	\N
+13905	1	0	0	0	0	\N	\N
+13910	1	0	0	0	0	\N	\N
+13918	1	0	0	0	0	\N	\N
+13957	1	0	0	0	0	\N	\N
+13968	1	0	0	0	0	\N	\N
+14012	1	0	0	0	0	\N	\N
+14014	1	0	0	0	0	\N	\N
+14060	1	0	0	0	0	\N	\N
+14100	1	0	0	0	0	\N	\N
+14111	1	0	0	0	0	\N	\N
+14134	1	0	0	0	0	\N	\N
+14170	1	0	0	0	0	\N	\N
+14172	1	0	0	0	0	\N	\N
+14185	1	0	0	0	0	\N	\N
+14191	1	0	0	0	0	\N	\N
+14195	1	0	0	0	0	\N	\N
+14200	1	0	0	0	0	\N	\N
+14229	1	0	0	0	0	\N	\N
+14255	1	0	0	0	0	\N	\N
+14268	1	0	0	0	0	\N	\N
+14289	1	0	0	0	0	\N	\N
+14291	1	0	0	0	0	\N	\N
+14318	1	0	0	0	0	\N	\N
+14368	1	0	0	0	0	\N	\N
+14375	1	0	0	0	0	\N	\N
+14393	1	0	0	0	0	\N	\N
+14405	1	0	0	0	0	\N	\N
+14412	1	0	0	0	0	\N	\N
+14423	1	0	0	0	0	\N	\N
+14444	1	0	0	0	0	\N	\N
+14447	1	0	0	0	0	\N	\N
+14472	1	0	0	0	0	\N	\N
+14477	1	0	0	0	0	\N	\N
+14486	1	0	0	0	0	\N	\N
+14502	1	0	0	0	0	\N	\N
+14517	1	0	0	0	0	\N	\N
+14531	1	0	0	0	0	\N	\N
+14541	1	0	0	0	0	\N	\N
+14551	1	0	0	0	0	\N	\N
+14553	1	0	0	0	0	\N	\N
+14556	1	0	0	0	0	\N	\N
+14567	1	0	0	0	0	\N	\N
+14598	1	0	0	0	0	\N	\N
+14606	1	0	0	0	0	\N	\N
+14610	1	0	0	0	0	\N	\N
+14612	1	0	0	0	0	\N	\N
+14660	1	0	0	0	0	\N	\N
+14669	1	0	0	0	0	\N	\N
+14676	1	0	0	0	0	\N	\N
+14705	1	0	0	0	0	\N	\N
+14723	1	0	0	0	0	\N	\N
+14733	1	0	0	0	0	\N	\N
+14744	1	0	0	0	0	\N	\N
+14756	1	0	0	0	0	\N	\N
+14791	1	0	0	0	0	\N	\N
+14799	1	0	0	0	0	\N	\N
+14829	1	0	0	0	0	\N	\N
+14831	1	0	0	0	0	\N	\N
+14863	1	0	0	0	0	\N	\N
+14919	1	0	0	0	0	\N	\N
+14977	1	0	0	0	0	\N	\N
+15009	1	0	0	0	0	\N	\N
+15016	1	0	0	0	0	\N	\N
+15029	1	0	0	0	0	\N	\N
+15046	1	0	0	0	0	\N	\N
+15047	1	0	0	0	0	\N	\N
+15073	1	0	0	0	0	\N	\N
+15080	1	0	0	0	0	\N	\N
+15144	1	0	0	0	0	\N	\N
+15169	1	0	0	0	0	\N	\N
+15171	1	0	0	0	0	\N	\N
+15183	1	0	0	0	0	\N	\N
+15195	1	0	0	0	0	\N	\N
+15217	1	0	0	0	0	\N	\N
+15241	1	0	0	0	0	\N	\N
+15306	1	0	0	0	0	\N	\N
+15336	1	0	0	0	0	\N	\N
+15339	1	0	0	0	0	\N	\N
+15344	1	0	0	0	0	\N	\N
+15363	1	0	0	0	0	\N	\N
+15403	1	0	0	0	0	\N	\N
+15443	1	0	0	0	0	\N	\N
+15444	1	0	0	0	0	\N	\N
+15450	1	0	0	0	0	\N	\N
+15469	1	0	0	0	0	\N	\N
+15499	1	0	0	0	0	\N	\N
+15528	1	0	0	0	0	\N	\N
+15564	1	0	0	0	0	\N	\N
+15582	1	0	0	0	0	\N	\N
+15605	1	0	0	0	0	\N	\N
+15616	1	0	0	0	0	\N	\N
+15680	1	0	0	0	0	\N	\N
+15718	1	0	0	0	0	\N	\N
+15795	1	0	0	0	0	\N	\N
+15862	1	0	0	0	0	\N	\N
+15876	1	0	0	0	0	\N	\N
+15891	1	0	0	0	0	\N	\N
+15897	1	0	0	0	0	\N	\N
+15924	1	0	0	0	0	\N	\N
+15927	1	0	0	0	0	\N	\N
+15935	1	0	0	0	0	\N	\N
+15949	1	0	0	0	0	\N	\N
+15953	1	0	0	0	0	\N	\N
+15975	1	0	0	0	0	\N	\N
+15980	1	0	0	0	0	\N	\N
+16046	1	0	0	0	0	\N	\N
+16049	1	0	0	0	0	\N	\N
+16073	1	0	0	0	0	\N	\N
+16180	1	0	0	0	0	\N	\N
+16189	1	0	0	0	0	\N	\N
+16192	1	0	0	0	0	\N	\N
+16219	1	0	0	0	0	\N	\N
+16278	1	0	0	0	0	\N	\N
+16301	1	0	0	0	0	\N	\N
+16323	1	0	0	0	0	\N	\N
+16329	1	0	0	0	0	\N	\N
+16347	1	0	0	0	0	\N	\N
+16357	1	0	0	0	0	\N	\N
+16374	1	0	0	0	0	\N	\N
+16375	1	0	0	0	0	\N	\N
+16390	1	0	0	0	0	\N	\N
+16411	1	0	0	0	0	\N	\N
+16435	1	0	0	0	0	\N	\N
+16476	1	0	0	0	0	\N	\N
+16495	1	0	0	0	0	\N	\N
+16506	1	0	0	0	0	\N	\N
+16560	1	0	0	0	0	\N	\N
+16582	1	0	0	0	0	\N	\N
+16630	1	0	0	0	0	\N	\N
+16632	1	0	0	0	0	\N	\N
+12594	1	0	12	5	0	\N	\N
+12597	1	0	3	2	1	\N	\N
+15184	1	0	10	1	1	\N	\N
+12509	1	19000	0	0	0	\N	\N
+12512	1	13500	0	0	0	\N	\N
+12699	1	11980	0	0	0	\N	\N
+12502	1	12000	30	2	1	2007-02-16 16:49:26	psql to\n'postgres'
+12506	1	0	23	26	0	2006-12-04 17:16:40	\N
+\.
+
+
+--
+-- Data for Name: dt_account_product; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY dt_account_product (account_id, product_id, product_count) FROM stdin;
+12502	2	2
+12502	3	8
+12502	5	1
+12509	7	9
+12509	6	7
+12512	1	2
+12512	3	9
+12512	2	1
+12699	5	2
+12699	6	5
+12762	1	2
+12502	1	2
+\.
+
+
+--
+-- Data for Name: dt_guild; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY dt_guild (guild_id, guild_name, master_account_id) FROM stdin;
+57	电脑DIY	12502
+58	火星常驻地球办事处	12553
+59	工程师看经济学	13007
+60	Database圈子	13019
+61	每日一题JAVA	12509
+\.
+
+
+--
+-- Data for Name: mt_entry; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY mt_entry (entry_id, entry_name) FROM stdin;
+1	OFFICIAL
+2	HANGAME
+3	C&C
+\.
+
+
+--
+-- Data for Name: mt_exer_type; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY mt_exer_type (exer_type_id, exer_type_name) FROM stdin;
+1	普通用户
+2	系统管理员
+\.
+
+
+--
+-- Data for Name: mt_product; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY mt_product (product_id, product_name, product_price, skill_id_0, skill_id_1) FROM stdin;
+1	Information Management 信息管理软件	150	1	2
+2	Rational 软件开发管理平台	200	3	4
+3	Lotus 协作办公软件	250	2	4
+4	Tivoli 服务管理软件	120	1	\N
+5	IBM WebSphere 软件	180	\N	3
+6	System z 软件	215	7	8
+7	IBM DB2	450	6	7
+8	IBM Mobile Portal\nIBM Mobile Portal	615	3	2
+\.
+
+
+--
+-- Data for Name: mt_skill; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY mt_skill (skill_id, skill_name) FROM stdin;
+1	HTML
+2	JavaScript 
+3	VBScript
+4	JScript
+5	ASP.NET
+6	Database
+7	Java
+8	C/C++
+\.
+
+
+--
+-- Name: pk_dt_account; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY dt_account
+    ADD CONSTRAINT pk_dt_account PRIMARY KEY (account_id);
+
+
+--
+-- Name: pk_dt_account_info; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY dt_account_info
+    ADD CONSTRAINT pk_dt_account_info PRIMARY KEY (account_id);
+
+
+--
+-- Name: pk_dt_account_product; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY dt_account_product
+    ADD CONSTRAINT pk_dt_account_product PRIMARY KEY (account_id, product_id);
+
+
+--
+-- Name: pk_dt_guild; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY dt_guild
+    ADD CONSTRAINT pk_dt_guild PRIMARY KEY (guild_id);
+
+
+--
+-- Name: pk_mt_entry; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY mt_entry
+    ADD CONSTRAINT pk_mt_entry PRIMARY KEY (entry_id);
+
+
+--
+-- Name: pk_mt_exer_type; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY mt_exer_type
+    ADD CONSTRAINT pk_mt_exer_type PRIMARY KEY (exer_type_id);
+
+
+--
+-- Name: pk_mt_product; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY mt_product
+    ADD CONSTRAINT pk_mt_product PRIMARY KEY (product_id);
+
+
+--
+-- Name: pk_mt_skill; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY mt_skill
+    ADD CONSTRAINT pk_mt_skill PRIMARY KEY (skill_id);
+
+
+--
+-- Name: fk_dt_accou_reference_dt_accou; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY dt_account_info
+    ADD CONSTRAINT fk_dt_accou_reference_dt_accou FOREIGN KEY (account_id) REFERENCES dt_account(account_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+
+--
+-- Name: fk_dt_accou_reference_dt_accou; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY dt_account_product
+    ADD CONSTRAINT fk_dt_accou_reference_dt_accou FOREIGN KEY (account_id) REFERENCES dt_account(account_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+
+--
+-- Name: fk_dt_accou_reference_mt_produ; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY dt_account_product
+    ADD CONSTRAINT fk_dt_accou_reference_mt_produ FOREIGN KEY (product_id) REFERENCES mt_product(product_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+
+--
+-- Name: fk_dt_guild_reference_dt_accou; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY dt_guild
+    ADD CONSTRAINT fk_dt_guild_reference_dt_accou FOREIGN KEY (master_account_id) REFERENCES dt_account(account_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+
+--
+-- Name: fk_mt_produ_reference_mt_skill; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY mt_product
+    ADD CONSTRAINT fk_mt_produ_reference_mt_skill FOREIGN KEY (skill_id_0) REFERENCES mt_skill(skill_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+
+--
+-- Name: fk_mt_produ_reference_mt_skill1; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY mt_product
+    ADD CONSTRAINT fk_mt_produ_reference_mt_skill1 FOREIGN KEY (skill_id_1) REFERENCES mt_skill(skill_id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
