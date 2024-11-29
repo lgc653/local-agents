@@ -103,12 +103,13 @@ AND last_login_date <= now( )
 
 * 格式化函数 `'YYYY/MM/DD HH24:MI:SS'`
 * 当前时间减去一个月：`now( ) - INTERVAL '1 months'`
+* 这题由于原始数据日期很老，所以应该检索结果是空
 
 ## 类型转换
 
 🔑**关键字**：CAST、||
 
-> ❓题目：显示dt_account的last_login_date是exer_type个月(exer_type作为参数)内的account_id,last_login_date。
+> ❓题目：显示dt_account的last_login_date是exer_type个月（exer_type作为参数）内的account_id，last_login_date。
 
 ```sql
 SELECT account_id, to_char(last_login_date, 'YYYY/MM/DD HH24:MI:SS')
@@ -117,7 +118,10 @@ WHERE last_login_date >= now( ) - CAST( exer_type || ' months' AS INTERVAL )
 AND last_login_date <= now( ) 
 ```
 
-💡讲解：将字符串常量`exer_type || ' months'`通过函数CAST转换成INTERVAL类型的常量
+💡讲解：
+
+* 将字符串常量`exer_type || ' months'`通过函数CAST转换成INTERVAL类型的常量
+* 这题由于原始数据日期很老，所以应该检索结果是空
 
 ## 大小写与数据比较
 
@@ -155,15 +159,15 @@ WHERE login_id ilike '%o%'
 >
 > 选出dt_account_info中的下列数据：exer_comment=
 >
-> psql to
-> 'postgres'
+> `psql to
+> 'postgres'`
 >
 > 注意：换行符为Linux换行符（\N)
 
 ```sql
 SELECT * 
 FROM dt_account_info
-WHERE exer_comment = 'psql to\n\'postgres\''
+WHERE exer_comment = E'psql to\n''postgres'''
 ```
 
 💡讲解：使用反斜杠逃逸
@@ -174,9 +178,9 @@ WHERE exer_comment = 'psql to\n\'postgres\''
 
 > ❓题目：
 >
-> 选出dt_account中所有exer_name含有‘?’的数据,其中的‘?’字符，均用 “@HG@”替换后显示出来
+> 选出dt_account中所有exer_name含有‘?’的数据，其中的‘?’字符，均用 “@HG@”替换后显示出来
 > 注意一个exer_name中可能含有多个‘?’
-> 例如：?carbon 显示为 @HG@carbon ， 339?339 显示 为 339@HG@339
+> 例如：`?carbon` 显示为 `@HG@carbon` ， `339?339` 显示 为 `339@HG@339`
 
 ```sql
 SELECT replace( exer_name, '?', '@HG@' ) 
@@ -194,7 +198,7 @@ WHERE position( '?' IN exer_name ) >0
 >
 > 选出dt_account中所有login_id含有‘-’字符的数据,将‘-’后面的字符显示出来。
 > 注意‘-’字符不一定在第一位，例如339-339，但是一个login_id中只有一个‘-’字符。
-> 例如：-carbon 显示 为 carbon ， zero-3719 显示 为 3719
+> 例如：`-carbon` 显示 为 `carbon` ， `zero-3719` 显示 为 `3719`
 
 ```sql
 SELECT substring( login_id FROM position( '-' IN login_id ) +1 FOR char_length( login_id ) - position( '-' IN login_id ) ) 
@@ -413,11 +417,10 @@ LEFT JOIN (
 
 > ❓题目：
 >
-> 将DT_ACCOUNT的account_id和exer_name组合成一个新字段输出,形如'\account_id\'exer_name
+> 将DT_ACCOUNT的account_id和exer_name组合成一个新字段输出,形如“ `'\account_id\'exer_name` ”，例如: `'\12506\'雲呑`
 
 ```sql
-SELECT '\'\\' || account_id || '\\\'' || exer_name
-FROM dt_account
+SELECT E'\'\\' || account_id || E'\\\'' || exer_name FROM dt_account;
 ```
 
 💡讲解：
@@ -430,7 +433,7 @@ FROM dt_account
 
 > ❓题目：
 >
-> 将DT_ACCOUNT的exer_name和他所属的guild_name组合成一个新字段输出。形如“ exer_name@guild_name ”。例如: alteil06@神勇ましい鉄金剛
+> 将DT_ACCOUNT的exer_name和他所属的guild_name组合成一个新字段输出。形如“ exer_name@guild_name ”。例如: `alteil06@神勇ましい鉄金剛`
 
 ```sql
 SELECT exer_name || '@' || 
@@ -547,7 +550,7 @@ INNER JOIN (
 
 > ❓题目：
 >
-> 查找所有有团员（dt_account.guild_id)加入的社团（dt_guild)
+> 查找所有有团员（dt_account.guild_id）加入的社团（dt_guild）
 
 ```sql
 SELECT dt_guild. * 
@@ -641,7 +644,7 @@ WHERE dt_account.guild_id != dt_guild.guild_id
 SELECT * 
 FROM dt_guild
 INNER JOIN (
-  SELECT guild_id, sum( win_count ) , sum( lose_count ) , sum( draw_count ) 
+  SELECT guild_id, sum( win_count ) as sum_win_count, sum( lose_count ) as sum_lose_count, sum( draw_count ) as sum_draw_count
   FROM dt_account
   INNER JOIN dt_account_info ON dt_account.account_id = dt_account_info.account_id
   GROUP BY guild_id
@@ -747,7 +750,7 @@ WHERE exer_type =2;
 
 💡讲解：
 
-* 列的必须和输入表的列一致，最后通过函数char_length直接建立一个新列
+* 列的必须和输入表的列一致，最后通过函数`char_length`直接建立一个新列
 
 ## SELECT INTO的运用
 
