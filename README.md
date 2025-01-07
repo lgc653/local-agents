@@ -48,7 +48,7 @@ Local Agents 是一套集成了多种AI功能的智能体集合，它通过AI辅
 
 本课程共6个章节，讲解了如何使用Node.js进行全栈开发，所涉及的知识比较粗浅，供大家参考。
 
-*  [基于Node.js的全栈开发入门](./nodejs-fullstack/README.md) ： 
+*  [基于Node.js的全栈开发入门](./nodejs-fullstack/README.md) 
 
 ## 课程体验
 

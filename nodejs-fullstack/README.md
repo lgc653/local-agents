@@ -14,7 +14,7 @@
 
 ## 开发语言
 
-* [ECMAScript 6 简介](ECMAScript 6 简介.md) 
+* [ECMAScript 6 简介](ECMAScript%206%20简介.md) 
 
 * [前端布局](前端布局.md) 
 
@@ -23,8 +23,8 @@
 这里虽然例子讲解基于VUE2系列，但是Vue Router、Vuex等组件变化也不大，文中也做了比较说明，VUE2入门后再学习VUE3难度也不大（使用AI转换简单的组件效果也很好）
 
 * [Vue.js](Vue.js.md) 
-* [Vue Router](Vue Router.md) 
-* [Vue UI组件库](Vue UI组件库.md)
+* [Vue Router](Vue%20Router.md) 
+* [Vue UI组件库](Vue%20UI组件库.md)
 * [Vuex](Vuex.md) 
 
 扩展阅读：
@@ -42,7 +42,7 @@
 
 * [swagger与API测试](swagger.md) 
 
-* [API Mock](API Mock.md) 
+* [API Mock](API%20Mock.md) 
 
 * [使用MarsCode IDE云开发前后端分离项目](https://juejin.cn/post/7424176544668778536)
 * [MarsCode IDE 云开发RAG REST API云开发](https://juejin.cn/post/7425875126528114738)
@@ -53,7 +53,7 @@
 
 扩展阅读：
 
-* [Gitee AI实现自然语言操作数据库](Gitee AI实现自然语言操作数据库.md) 
+* [Gitee AI实现自然语言操作数据库](Gitee%20AI实现自然语言操作数据库.md) 
 
 * [Sequelize](Sequelize.md) 
 
