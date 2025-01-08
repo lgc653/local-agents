@@ -87,7 +87,7 @@ function aa() {
 以上的代码实际上是：
 
 ```javascript
-  function aa() {
+function aa() {
 	var test // 变量提升，函数最顶部
 	if (flag) {
 		test = 'hello man'
@@ -102,7 +102,7 @@ function aa() {
 所以不用关心flag是否为 `true` or `false`。实际上，无论如何 test 都会被创建声明。
 
 接下来ES6主角登场：
- 我们通常用 `let` 和 `const` 来声明，`let` 表示**变量**、`const` 表示**常量**。`let` 和 `const` 都是块级作用域。怎么理解这个块级作用域？
+我们通常用 `let` 和 `const` 来声明，`let` 表示**变量**、`const` 表示**常量**。`let` 和 `const` 都是块级作用域。怎么理解这个块级作用域？
 
 - 在一个函数内部
 - 在一个代码块内部
@@ -112,7 +112,7 @@ function aa() {
 看以下代码：
 
 ```javascript
-  function aa() {
+function aa() {
 	if (flag) {
 		let test = 'hello man'
 	} else {
@@ -181,6 +181,9 @@ for (var i = 0; i < 10; i++) {
 funcs.forEach(function(func) {
 	func()
 })
+```
+
+```javascript
 // 再来看看es6怎么处理的
 const funcs = []
 for (let i = 0; i < 10; i++) {
@@ -204,6 +207,9 @@ ES6模板字符简直是开发者的福音啊，解决了 ES5 在字符串功能
 //ES5 
 var name = 'lux'
 console.log('hello' + name)
+```
+
+```javascript
 //es6
 const name = 'lux'
 console.log(`hello ${name}`) //hello lux
@@ -228,15 +234,24 @@ const template = `<div>
 // 1.includes：判断是否包含然后直接返回布尔值
 const str = 'hahay'
 console.log(str.includes('y')) // true
+```
+
+```javascript
 // 2.repeat: 获取字符串重复n次
 const str = 'he'
 console.log(str.repeat(3)) // 'hehehe'
 //如果你带入小数, Math.floor(num) 来处理
 // s.repeat(3.1) 或者 s.repeat(3.9) 都当做成 s.repeat(3) 来处理
+```
+
+```javascript
 // 3. startsWith 和 endsWith 判断是否以 给定文本 开始或者结束
 const str = 'hello world!'
 console.log(str.startsWith('hello')) // true
 console.log(str.endsWith('!')) // true
+```
+
+```javascript
 // 4. padStart 和 padEnd 填充字符串，应用场景：时分秒
 setInterval(() => {
 	const now = new Date()
@@ -330,10 +345,7 @@ var getTempItem = id => ({ id: id, name: "Temp" });
 >
 > 很不幸，空对象和空的语句块`{}`看起来是一样的。ES6规定，紧跟箭头函数中箭头符号后面的`{`会被解析成语句块的开始， 而不是一个空对象。
 
-使用ES6重构代码
-
 ```javascript
-// 请使用ES6重构以下代码
 var calculate = function(x, y, z) {
 	if (typeof x != 'number') {
 		x = 0
@@ -351,6 +363,12 @@ var calculate = function(x, y, z) {
 	}
 	return result
 }
+```
+
+使用ES6重构代码
+
+```javascript
+// 请使用ES6重构以下代码
 const calculate = (x, y, z) => {
 	x = typeof x !== 'number' ? 0 : x
 	y = typeof y !== 'number' ? 6 : y
@@ -508,8 +526,7 @@ const alp = {
 const alphabets = { ...alp,
 	third: 'c'
 }
-console.log(alphabets) //{ "fist": "a", "second": "b", "third": "c"
-}
+console.log(alphabets) //{ "fist": "a", "second": "b", "third": "c"}
 ```
 
 有时候我们想获取数组或者对象除了前几项或者除了某几项的其他项
@@ -528,9 +545,9 @@ const user = {
 }
 const {
 	username,
-	...rest
+	...restUser
 } = user
-console.log(rest) //{"address": "peking", "age": 19, "gender": "female"}
+console.log(restUser) //{"address": "peking", "age": 19, "gender": "female"}
 ```
 
 对于 Object 而言，还可以用于组合成新的 Object 。(ES2017 stage-2 proposal) 当然如果有重复的属性名，右边覆盖左边
