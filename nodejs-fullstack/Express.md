@@ -302,37 +302,87 @@ router.post("/await/:app_uuid", function(req, res, next) {
 module.exports = router;
 ```
 
-## EJS 模板语言
+## 项目示例
+
+本项目综合运用了EJS 模板语言 + RESTful API
+
+> 随着时代的发展，Express多被用于RESTful API的开发，EJS 模板语言的应用越来越少了。
+
+### 项目架构
+
+```mermaid
+graph LR
+    subgraph 前端
+        A[index.ejs] --> B(header.ejs)
+        A --> C(footer.ejs)
+        A -- Ajax 请求 --> D["/task/get"]
+        A -- Ajax 请求 --> E["/task/update"]
+        A -- Ajax 请求 --> F["/task/delete"]
+        C --> L[page.index.js]
+    end
+    subgraph 后端
+        D["/task/get"] --> M[index.js]
+        E["/task/update"] --> M
+        F["/task/delete"] --> M
+        M -- 数据库操作 --> N[task_management 数据库]
+    end
+    N -- 数据 --> M
+    M -- 渲染 --> A
+```
+
+**说明:**
+
+*   **index.ejs**: 主页面模板，包含了任务列表的 HTML 结构。它通过 `include` 指令引入 `header.ejs` 和 `footer.ejs`。
+*   **header.ejs**: 页面头部模板，包含了 `<head>` 部分，例如标题、CSS 链接等。
+*   **footer.ejs**: 页面底部模板，包含了 `<script>` 部分，用于引入 JavaScript 文件。
+*   **page.index.js**: 页面特定的 JavaScript 逻辑，例如处理 Ajax 请求、操作 DOM 等。
+*   **index.js**: 后端路由处理程序，处理 `/task/get`、`/task/update` 和 `/task/delete` 请求。
+*   **task_management 数据库**: 存储任务数据的数据库。
+
+**流程:**
+
+1.  用户访问网站，服务器渲染 `index.ejs` 模板，生成 HTML 页面并返回给浏览器。
+2.  浏览器加载页面，并执行 `page.index.js` 中的 JavaScript 代码。
+3.  用户在页面上进行操作，例如点击“编辑”或“删除”按钮，触发 Ajax 请求。
+4.  `page.index.js` 发送 Ajax 请求到后端相应的路由，例如 `/task/update` 或 `/task/delete`。
+5.  `index.js` 接收请求，并与 `task_management` 数据库交互，执行相应的数据库操作。
+6.  `index.js` 将操作结果返回给前端。
+7.  `page.index.js` 接收后端返回的结果，并更新页面。
 
 ### index.ejs
 
 ```ejs
 <% include header.ejs %>
 <div>
-	<h1>项目</h1>
-	<p><div class="alert alert-danger" role="alert">
-		更新数据前请输入维护密码： <input type="text" placeholder="输入维护密码" id="maintainPassword" />
+	<h1>任务列表</h1>
+	<p><div class="alert alert-info" role="alert">
+		提示：双击日期时间即可修改
 	</div></p>
 	<table class="table table-striped">
 		<thead>
 			<tr>
-				<th>项目</th>
+				<th>任务名称</th>
 				<th>开始时间</th>
 				<th>结束时间</th>
+				<th>状态</th>  <!-- 新增状态列 -->
 				<th>操作</th>
 			</tr>
 		</thead>
 		<tbody>
-			<% for(var i=0; i<borrows.length; i++) { %>
+			<% for(var i=0; i<tasks.length; i++) { %>
 			<tr>
-				<td><%= borrows[i].borrowTitle %></td>
+				<td><%= tasks[i].taskName %></td>
 				<td>
-					<input id="remainTimeStart<%= borrows[i].id %>" type="text" value="<%= borrows[i].remainTimeStart %>" readonly class="form_datetime">
+					<input id="startTime<%= tasks[i].id %>" type="text" value="<%= tasks[i].startTime %>" readonly class="form_datetime">
 				</td>
 				<td>
-					<input id="remainTimeEnd<%= borrows[i].id %>" type="text" value="<%= borrows[i].remainTimeEnd %>" readonly class="form_datetime">
+					<input id="endTime<%= tasks[i].id %>" type="text" value="<%= tasks[i].endTime %>" readonly class="form_datetime">
 				</td>
-				<td><input id="btnUpd<%= borrows[i].id %>" class="btn btn-primary btnUpd" type="button" value="更新"></td>
+				<td><%= tasks[i].status %></td> <!-- 显示任务状态 -->
+				<td>
+					<input id="btnEdit<%= tasks[i].id %>" class="btn btn-primary btnEdit" type="button" value="编辑" data-id="<%= tasks[i].id %>">
+					<input id="btnDelete<%= tasks[i].id %>" class="btn btn-danger btnDelete" type="button" value="删除" data-id="<%= tasks[i].id %>">
+				</td>
 			</tr>
 			<% } %>
 		</tbody>
@@ -340,6 +390,7 @@ module.exports = router;
 </div>
 <% include footer.ejs %>
 ```
+
 
 ### header.ejs
 
@@ -371,6 +422,91 @@ $LAB
 </html>
 ```
 
+### page.index.js
+
+```js
+(function($) {
+    $(".form_datetime").datetimepicker({
+        format: 'yyyy-mm-dd hh:ii:ss',
+        autoclose: true,
+        language: "zh-CN"
+    });
+
+    // 编辑按钮点击事件
+    $(".btnEdit").click(function() {
+        var id = $(this).data("id");
+        var startTimeInput = $("#startTime" + id);
+        var endTimeInput = $("#endTime" + id);
+
+        // 切换输入框的只读状态
+        startTimeInput.prop("readonly", !startTimeInput.prop("readonly"));
+        endTimeInput.prop("readonly", !endTimeInput.prop("readonly"));
+
+        // 如果输入框变为可编辑状态，则显示保存按钮
+        if (!startTimeInput.prop("readonly")) {
+            $(this).val("保存");
+            $(this).removeClass("btnEdit").addClass("btnSave"); // 更改class以区分编辑和保存状态
+        }
+    });
+
+
+    // 保存按钮点击事件 (动态绑定)
+    $(document).on("click", ".btnSave", function() {
+        var id = $(this).data("id");
+        var startTime = $("#startTime" + id).val();
+        var endTime = $("#endTime" + id).val();
+
+        $.ajax({
+            url: '/task/update',
+            type: 'POST',
+            data: { id: id, startTime: startTime, endTime: endTime },
+            dataType: 'json',
+            success: function(response) {
+                if (response.flg) {
+                    showAlertPanel("更新成功！");
+                    // 更新按钮状态
+                    $(`#btnEdit${id}`).val("编辑").removeClass("btnSave").addClass("btnEdit");
+                    $("#startTime" + id).prop("readonly", true);
+                    $("#endTime" + id).prop("readonly", true);
+                } else {
+                    showAlertPanel("更新失败：" + response.err);
+                }
+            },
+            error: function() {
+                showAlertPanel("更新失败：网络错误");
+            }
+        });
+    });
+
+    // 删除按钮点击事件
+    $(".btnDelete").click(function() {
+        var id = $(this).data("id");
+        if (confirm("确定要删除此任务吗？")) {
+            $.ajax({
+                url: '/task/delete',
+                type: 'POST',
+                data: { id: id },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.flg) {
+                        showAlertPanel("删除成功！");
+                        // 移除对应的行
+                        $(`#btnEdit${id}`).closest('tr').remove();
+                    } else {
+                        showAlertPanel("删除失败：" + response.err);
+                    }
+                },
+                error: function() {
+                    showAlertPanel("删除失败：网络错误");
+                }
+            });
+        }
+    });
+
+
+}(jQuery));
+```
+
 ### index.js
 
 ```javascript
@@ -379,86 +515,88 @@ var router = express.Router();
 var mysql = require('mysql');
 var moment = require('moment');
 moment.locale("zh-cn");
-//数据库链接信息.创建数据库连接池。
+
+// 数据库连接信息
 var pool = mysql.createPool({
 	host: 'localhost',
-	port: '3306', //可以不填写，默认为3306
+	port: '3306',
 	user: 'root',
 	password: '',
-	database: 'xxjrg',
+	database: 'task_management',
 	dateStrings: true
 });
-/* GET 获取首页 */
+
+/* GET 获取任务列表 */
 router.get('/', function(req, res, next) {
 	pool.getConnection(function(err, connection) {
-		connection.query("SELECT * from t_borrow order by id desc", function(err, rows, fields) {
+		// 查询 tasks 表，并按 id 倒序排列
+		connection.query("SELECT * from tasks order by id desc", function(err, rows, fields) {
 			if (err) throw err;
-			//res.send('user id is:'+req.params.id);
-			//console.log('The solution is: ', rows);
-			for (var i = 0; i < rows.length; i++) {
-				rows[i].remainTimeEndFromNow = moment(rows[i].remainTimeEnd, "YYYY-MM-DD HH:mm:ss").fromNow();
-			};
 			res.render('index', {
-				title: 'xx金融-您身边的金融服务专家',
+				title: '任务管理系统',
 				pageCode: 'index',
-				borrows: rows
+				tasks: rows
 			});
 		});
 		connection.release();
 	});
 });
-/* 获取抵押详情 */
-router.get('/borrow/get', function(req, res, next) {
-	var id = mysql.escape(req.query.id) ? parseInt(req.query.id) : 0;
+
+/* 获取单个任务 */
+router.get('/task/get', function(req, res, next) {
+	var id = req.query.id;
 	pool.getConnection(function(err, connection) {
-		connection.query("SELECT * from t_borrow where id = " + id, function(err, rows, fields) {
+		connection.query("SELECT * from tasks where id = ?", [id], function(err, rows) { // 使用参数化查询
 			if (err) throw err;
-			res.json({
-				"rows": rows
-			});
+			res.json({ tasks: rows });
 		});
 		connection.release();
 	});
 });
-/* 更新抵押 */
-router.post('/borrow/modify', function(req, res, next) {
-	var maintainPassword = req.body.maintainPassword;
-	var id = mysql.escape(req.body.id) ? parseInt(req.body.id) : 0;
-	var remainTimeStart = mysql.escape(req.body.remainTimeStart);
-	var remainTimeEnd = mysql.escape(req.body.remainTimeEnd);
-	var errMsg = "";
-	if (maintainPassword != "19851218") {
-		errMsg = "未输入维护密码或维护密码错误！";
-	}
-	if (!moment(remainTimeStart, "YYYY-MM-DD HH:mm:ss").isValid()) {
-		errMsg = "项目开始时间输入错误，不是正确的日期时间格式！";
-	}
-	if (!moment(remainTimeEnd, "YYYY-MM-DD HH:mm:ss").isValid()) {
-		errMsg = "项目结束时间输入错误，不是正确的日期时间格式！";
-	}
-	if (errMsg != "") {
-		res.json({
-			"flg": false,
-			"err": {
-				"code": errMsg
-			}
-		});
-		return;
-	}
+
+/* 更新任务 */
+router.post('/task/update', function(req, res, next) {
+	var id = req.body.id;
+	var startTime = req.body.startTime;
+	var endTime = req.body.endTime;
+
+    // 输入校验
+    if (!moment(startTime, "YYYY-MM-DD HH:mm:ss").isValid()) {
+        return res.json({ flg: false, err: "开始时间格式错误" });
+    }
+    if (!moment(endTime, "YYYY-MM-DD HH:mm:ss").isValid()) {
+        return res.json({ flg: false, err: "结束时间格式错误" });
+    }
+
 	pool.getConnection(function(err, connection) {
-		connection.query("update t_borrow set remainTimeStart =" + remainTimeStart + ", remainTimeEnd = " + remainTimeEnd + " where id = " + id, function(err, result) {
-			var flg = true;
+		connection.query("UPDATE tasks SET startTime = ?, endTime = ? WHERE id = ?", [startTime, endTime, id], function(err, result) { // 使用参数化查询
 			if (err) {
-				flg = false;
+				res.json({ flg: false, err: err });
+			} else {
+				res.json({ flg: true });
 			}
-			res.json({
-				"flg": flg,
-				"err": err
-			});
 		});
 		connection.release();
 	});
 });
+
+
+/* 删除任务 */
+router.post('/task/delete', function(req, res, next) {
+	var id = req.body.id;
+	pool.getConnection(function(err, connection) {
+		connection.query("DELETE FROM tasks WHERE id = ?", [id], function(err, result) { // 使用参数化查询
+			if (err) {
+				res.json({ flg: false, err: err });
+			} else {
+				res.json({ flg: true });
+			}
+		});
+		connection.release();
+	});
+});
+
+
 module.exports = router;
 ```
 

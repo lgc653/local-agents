@@ -33,6 +33,16 @@
 * [Vue3组件](Vue3组件.md) 
 * [Vue3组件设计](Vue3组件设计.md) 
 
+## 数据存储
+
+* [SQLite](SQLite.md) 
+
+扩展阅读：
+
+* [Gitee AI实现自然语言操作数据库](Gitee%20AI实现自然语言操作数据库.md) 
+
+* [Sequelize](Sequelize.md) 
+
 ## API开发
 
 * [JSON](JSON.md) 
@@ -46,16 +56,6 @@
 
 * [使用MarsCode IDE云开发前后端分离项目](https://juejin.cn/post/7424176544668778536)
 * [MarsCode IDE 云开发RAG REST API云开发](https://juejin.cn/post/7425875126528114738)
-
-## 数据存储
-
-* [SQLite](SQLite.md) 
-
-扩展阅读：
-
-* [Gitee AI实现自然语言操作数据库](Gitee%20AI实现自然语言操作数据库.md) 
-
-* [Sequelize](Sequelize.md) 
 
 ## 其他
 

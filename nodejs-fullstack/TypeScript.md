@@ -21,6 +21,94 @@ TypeScript 是一种由微软开发的自由和开源的编程语言。它是 Ja
 - 和一些插件库的兼容并不是特别完美，如以前在 vue2 项目里使用 typescript就并不是那么顺畅
 - 增加前期开发的成本，毕竟你需要写更多的代码（但是便于后期的维护）
 
+## 案例
+
+这里是一个真实发生的编码错误，由于其他代码的影响，让我百思不得其解，耗费了大量时间。最终在AI的帮助下发现是由于简单的拼写错误造成的，如果使用了TypeScript技术，就不会发生类似的低级错误。
+
+### AI debug
+
+```js
+export const getChatAssistants = async(state) => {
+  window.electron.ipcRenderer.send('get-chat-assistants')
+  window.electron.ipcRenderer.once('get-chat-assistants-return', (event, response) => {
+    if (response.code !== 200) {
+      ElNotification({
+        title: '错误',
+        message: response.message,
+        type: 'error'
+      })
+    } else {
+      state.chatAssistants = response.items
+      if (state?.currentAssistant?.id) {
+        state.currentAssistan = state.chatAssistants.find(
+          (item) => item.id === state.currentAssistant.id
+        )
+      } else if (state.chatAssistants.length > 0) {
+        state.currentAssistant = state.chatAssistants[0]
+      }
+      // 防止默认的currentAssistant为空（比如选中的currentAssistant被删除了）
+      if (!state?.currentAssistant?.id) {
+        state.currentAssistant = { id: '', prompt: '你是一个工作和学习中的助理。', mode: 'multi-turn' }
+      }
+    }
+  })
+}
+```
+
+这个函数有什么错误，为什么我的Assistant发生变化后没有刷新
+
+### AI回答
+
+这段代码有几个潜在的问题，导致 Assistant 改变后可能无法正确刷新：
+
+1. **`currentAssistan` 拼写错误:**  `state.currentAssistan = state.chatAssistants.find(...)` 这里拼写错误，应该是 `state.currentAssistant`。这个错误会导致赋值失败，`state.currentAssistant` 的值不会更新，界面自然也不会刷新。
+
+> 其它内容略……
+
+### TypeScript解决方案
+
+使用 TypeScript 可以帮助你在编译时就发现这种拼写错误，从而避免运行时出现问题。
+
+如果使用 TypeScript，可以这样定义 `state` 的类型：
+
+```typescript
+interface ChatAssistant {
+  id: string;
+  prompt: string;
+  mode: string;
+}
+
+interface State {
+  chatAssistants: ChatAssistant[];
+  currentAssistant: ChatAssistant | null; // 允许为空
+}
+
+export const getChatAssistants = async (state: State) => {
+  // ... (其余代码与之前的修正版本类似)
+  if (response.code !== 200) {
+    // ...
+    state.currentAssistant = { id: 'default', prompt: '你是一个工作和学习中的助理。', mode: 'multi-turn' };
+  } else {
+    state.chatAssistants = response.items;
+
+    if (state?.currentAssistant?.id) {
+      state.currentAssistant = state.chatAssistants.find(
+        (item) => item.id === state.currentAssistant.id // TypeScript 会在这里检查 currentAssistant 的类型
+      );
+      // ... (其余逻辑)
+    }
+    // ...
+  }
+};
+
+```
+
+**由此可见TypeScript 的优势：**
+
+* **静态类型检查:** TypeScript 会在编译时检查 `state.currentAssistan` 和 `state.currentAssistant` 的拼写，如果出现错误，会立即报错，避免运行时才发现问题。
+* **代码提示和自动补全:**  IDE 会根据类型定义提供代码提示和自动补全，减少拼写错误的可能性。
+* **更好的代码可读性和可维护性:**  明确的类型定义使代码更易于理解和维护。
+
 ## 安装环境
 
 首先，我们可以新建一个空文件夹，用来学习 ts，例如我在文件夹下新建了个 `helloworld.ts`
