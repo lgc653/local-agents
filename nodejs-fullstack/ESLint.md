@@ -1,7 +1,5 @@
 # ESLint
 
-[TOC]
-
 > There are a thousand Hamlets in a thousand people's eyes.
 
 一千个程序员，就有一千种代码风格。在前端开发中，有几个至今还在争论的代码风格差异：

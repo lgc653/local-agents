@@ -8,27 +8,13 @@ Local Agents 是一套集成了多种AI功能的智能体集合，它通过AI辅
 
 ## 课程列表
 
-### Python数据分析
+### Python
 
-#### 模块一：Python 基础
+* [Python数据分析](./Python/README.md) ：本课程共4个章节（已完结），讲解了使用Python数据分析，涵盖了NumPy、Pandas、Matplotlib、openpyxl、scikit-learn、PyTorch、LLM等常用技术和框架
 
-打好Python的基础，学会使用Python结合python常用包和第三方工具完成任务，学会操作、分析csv、json这样的半结构化数据源。为后续进行数据分析的学习打好基础
+### 全栈
 
-* [Python基础](./Python/Python基础.md)
-* [Python的数据类型](./Python/Python的数据类型.md)
-* [Python的函数与类](./Python/Python的函数与类.md)
-* [Python与文件系统](./Python/Python与文件系统.md)
-* [Python与JSON](./Python/Python与JSON.md)
-* [Tkinter](./Python/Tkinter.md) 
-
-#### 模块二：数据分析包介绍与实践
-
-学会NumPy + Pandas + Matplotlib的黄金组合，能够使用黄金组合 + Excel制作各种分析报表
-
-* [NumPy](./Python/NumPy.md)
-* [Pandas](./Python/Pandas.md)
-* [Matplotlib](./Python/Matplotlib.md)
-* [openpyxl](./Python/openpyxl.md)
+*  [基于Node.js的全栈开发入门](./nodejs-fullstack/README.md) ：本课程共6个章节（已完结），讲解了如何使用Node.js进行全栈开发。
 
 ### 前端
 
@@ -43,12 +29,6 @@ Local Agents 是一套集成了多种AI功能的智能体集合，它通过AI辅
 ### OOAD
 
 *  [AI与软件设计](./OOAD/AI与软件设计.md)
-
-### 全栈
-
-本课程共6个章节，讲解了如何使用Node.js进行全栈开发，所涉及的知识比较粗浅，供大家参考。
-
-*  [基于Node.js的全栈开发入门](./nodejs-fullstack/README.md) 
 
 ## 课程体验
 

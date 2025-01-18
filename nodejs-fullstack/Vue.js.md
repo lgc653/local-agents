@@ -29,6 +29,8 @@ author: 刘谷川
 
 2014年2月，开发了一个前端开发库Vue.js。Vue.js 是构建 Web 界面的 JavaScript 库，是一个通过简洁的API提供高效的数据绑定和灵活的组件系统。
 
+![img](Vue.js.assets/5a267acc4d0f42598f1c06ef37c0a69d.png)
+
 ### 三大框架
 
 - Vue
