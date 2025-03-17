@@ -16,6 +16,10 @@ Local Agents 是一套集成了多种AI功能的智能体集合，它通过AI辅
 
 *  [基于Node.js的全栈开发入门](./nodejs-fullstack/README.md) ：本课程共6个章节（已完结），讲解了如何使用Node.js进行全栈开发。
 
+### AIGC
+
+*  [AIGC实战](./AIGC/README.md) ：本课程现有6个章节（随着AIGC技术的发展不断更新），介绍各种AIGC技术的实战，理论实践相结合。
+
 ### 前端
 
 #### Web 3D
